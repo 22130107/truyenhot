@@ -59,7 +59,7 @@ export function Header() {
             <div className="hidden md:flex items-center flex-wrap mr-auto ml-[16px] gap-[8px]">
               {/* Genres Dropdown */}
               <div className="relative group">
-                <button className="flex items-center text-center bg-transparent text-white pt-2 pr-4 pb-2 pl-4 rounded-md hover:bg-white/10 transition-colors">
+                <button className="flex items-center text-center bg-transparent text-white pt-2 pr-4 pb-2 pl-4 rounded-md hover:bg-white/10 transition-colors font-medium">
                   Thể Loại
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 ml-1 group-hover:rotate-180 transition-transform">
                     <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />
@@ -83,8 +83,8 @@ export function Header() {
                 </div>
               </div>
 
-              <Link to="/guide" className="items-center flex text-white pt-2 pr-4 pb-2 pl-4 rounded-md hover:bg-white/10 transition-colors">Hướng dẫn nạp</Link>
-              <a href="https://www.facebook.com/share/14PCFwe5mjN/" target="_blank" rel="noopener noreferrer" className="items-center flex text-white pt-2 pr-4 pb-2 pl-4 rounded-md hover:bg-white/10 transition-colors">Fanpage</a>
+              <Link to="/guide" className="items-center flex text-white pt-2 pr-4 pb-2 pl-4 rounded-md hover:bg-white/10 transition-colors font-medium">Hướng dẫn nạp</Link>
+              <span className="items-center flex text-white pt-2 pr-4 pb-2 pl-4 rounded-md opacity-60 cursor-default font-medium">Fanpage</span>
             </div>
 
             <div className="items-center flex gap-2">
@@ -120,12 +120,48 @@ export function Header() {
                       className="w-10 h-10 rounded-full border-2 border-[rgb(250,204,21)]" 
                       alt="User" 
                     />
-                    <span className="hidden sm:block text-white font-medium">User Test</span>
                   </button>
                   <div className="absolute right-0 top-full pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-[9999]">
-                    <div className="bg-[rgb(31,41,55)] border border-neutral-800 rounded-xl shadow-2xl p-2 w-48">
-                      <Link to="/library" className="block px-4 py-2 text-sm text-gray-300 hover:bg-white/10 rounded-lg">Thư viện của tôi</Link>
-                      <button onClick={handleLogout} className="w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-red-500/10 rounded-lg">Đăng xuất</button>
+                    <div className="bg-[rgb(18,18,18)] border border-neutral-800 rounded-lg shadow-2xl w-64 overflow-hidden">
+                      {/* User Info Section */}
+                      <div className="p-4 border-b border-neutral-800">
+                        <div className="font-bold text-white text-lg">Trịnh Huỳnh</div>
+                        <div className="text-gray-500 text-xs truncate">huynh080104@gmail.com</div>
+                      </div>
+                      
+                      {/* Menu Links */}
+                      <div className="p-2">
+                        <Link to="/library" className="flex items-center gap-4 px-3 py-2.5 text-gray-300 hover:text-white hover:bg-white/5 rounded-md transition-colors">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+                          </svg>
+                          <span className="text-sm">Thư viện của tôi</span>
+                        </Link>
+                        
+                        <Link to="/profile" className="flex items-center gap-4 px-3 py-2.5 text-gray-300 hover:text-white hover:bg-white/5 rounded-md transition-colors">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                          </svg>
+                          <span className="text-sm">Trang cá nhân</span>
+                        </Link>
+                        
+                        <Link to="/topup" className="flex items-center gap-4 px-3 py-2.5 text-gray-300 hover:text-white hover:bg-white/5 rounded-md transition-colors">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                          <span className="text-sm">Nạp xu</span>
+                        </Link>
+                      </div>
+                      
+                      {/* Logout */}
+                      <div className="p-2 border-t border-neutral-800">
+                        <button onClick={handleLogout} className="flex items-center gap-4 w-full px-3 py-2.5 text-red-500 hover:bg-red-500/10 rounded-md transition-colors">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+                          </svg>
+                          <span className="text-sm font-bold">Đăng xuất</span>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -141,17 +177,15 @@ export function Header() {
         </div>
       </header>
 
-      {/* Mobile Sidebar - Moved outside of header for stacking context safety */}
+      {/* Mobile Sidebar */}
       <div 
         className={`fixed inset-0 z-[10000] md:hidden transition-all duration-300 ${isMobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
       >
-        {/* Overlay */}
         <div 
           className="absolute inset-0 bg-black/80 backdrop-blur-sm"
           onClick={() => setIsMobileMenuOpen(false)}
         />
         
-        {/* Sidebar Content */}
         <div 
           className={`absolute inset-y-0 left-0 w-80 bg-[#121212] shadow-2xl transform transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}
         >
@@ -169,13 +203,26 @@ export function Header() {
             </div>
             
             <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-[#121212]">
+              {isLoggedIn && (
+                <div className="p-4 bg-white/5 rounded-xl border border-white/10 mb-2">
+                  <div className="font-bold text-white">Trịnh Huỳnh</div>
+                  <div className="text-gray-500 text-xs truncate">huynh080104@gmail.com</div>
+                </div>
+              )}
+
               <div className="space-y-3">
                 <h3 className="text-gray-500 uppercase text-xs font-bold tracking-widest">Menu</h3>
                 <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className="block text-lg font-medium text-gray-200 py-2">Trang chủ</Link>
                 <Link to="/library" onClick={() => setIsMobileMenuOpen(false)} className="block text-lg font-medium text-gray-200 py-2">Thư viện</Link>
+                {isLoggedIn && (
+                  <>
+                    <Link to="/profile" onClick={() => setIsMobileMenuOpen(false)} className="block text-lg font-medium text-gray-200 py-2">Trang cá nhân</Link>
+                    <Link to="/topup" onClick={() => setIsMobileMenuOpen(false)} className="block text-lg font-medium text-gray-200 py-2">Nạp xu</Link>
+                  </>
+                )}
                 <Link to="/guide" onClick={() => setIsMobileMenuOpen(false)} className="block text-lg font-medium text-gray-200 py-2">Hướng dẫn nạp</Link>
                 {isLoggedIn ? (
-                  <button onClick={handleLogout} className="block text-lg font-bold text-red-400 py-2 text-left">Đăng xuất</button>
+                  <button onClick={handleLogout} className="block text-lg font-bold text-red-500 py-2 text-left">Đăng xuất</button>
                 ) : (
                   <Link to="/login" onClick={() => setIsMobileMenuOpen(false)} className="block text-lg font-bold text-[rgb(250,204,21)] py-2">Đăng nhập / Đăng ký</Link>
                 )}
@@ -210,13 +257,6 @@ export function Header() {
                   ))}
                 </div>
               </div>
-            </div>
-            
-            <div className="p-6 border-t border-neutral-800 bg-[#121212]">
-              <a href="https://facebook.com" className="flex items-center gap-3 text-blue-500 font-medium p-2 rounded-md hover:bg-blue-500/10 transition-colors">
-                <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                Theo dõi Fanpage
-              </a>
             </div>
           </div>
         </div>

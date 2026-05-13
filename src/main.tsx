@@ -10,6 +10,8 @@ import RegisterPage from './pages/RegisterPage.tsx'
 import ReadingPage from './components/reading/ReadingPage.tsx'
 import BrowsePage from './pages/BrowsePage.tsx'
 import LibraryPage from './pages/LibraryPage.tsx'
+import ProfilePage from './pages/ProfilePage.tsx'
+import TopupPage from './pages/TopupPage.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -21,6 +23,8 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/browse" element={<BrowsePage />} />
         <Route path="/category/:genre" element={<BrowsePage />} />
         <Route path="/library" element={<LibraryPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/topup" element={<TopupPage />} />
         <Route path="/guide" element={<GuidePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
