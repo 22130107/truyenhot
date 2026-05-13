@@ -59,12 +59,12 @@ export function HeroSection() {
   return (
     <section className="items-center justify-center">
       <div className="ml-auto mr-auto">
-        <section className="overflow-hidden relative w-full h-[650px]">
+        <section className="overflow-hidden relative w-full h-[450px] md:h-[650px]">
           {/* Background Images with Transition */}
           {HERO_ITEMS.map((item, index) => (
             <div 
               key={index}
-              className={`absolute w-full h-[650px] left-0 top-0 right-0 bottom-0 transition-opacity duration-1000 ${index === currentIndex ? 'opacity-100' : 'opacity-0'}`}
+              className={`absolute w-full h-full left-0 top-0 right-0 bottom-0 transition-opacity duration-1000 ${index === currentIndex ? 'opacity-100' : 'opacity-0'}`}
             >
               <img 
                 src={item.imageUrl} 
@@ -75,57 +75,54 @@ export function HeroSection() {
           ))}
 
           <div className="pointer-events-none absolute left-0 top-0 right-0 bottom-0">
-            <div className="pointer-events-none absolute w-[50%] left-0 top-0 bottom-0" style={{"backgroundImage":"linear-gradient(to right, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0))"}}></div>
-            <div className="pointer-events-none absolute w-[50%] top-0 right-0 bottom-0" style={{"backgroundImage":"linear-gradient(to left, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0))"}}></div>
-            <div className="pointer-events-none absolute h-[25%] left-0 right-0 bottom-0">
-              <div className="pointer-events-none absolute left-0 top-0 right-0 bottom-0"></div>
-            </div>
-            <div className="pointer-events-none absolute h-[25%] left-0 top-0 right-0" style={{"backgroundImage":"linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0))"}}></div>
+            <div className="pointer-events-none absolute w-full md:w-[50%] left-0 top-0 bottom-0" style={{"backgroundImage":"linear-gradient(to right, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0))"}}></div>
+            <div className="hidden md:block pointer-events-none absolute w-[50%] top-0 right-0 bottom-0" style={{"backgroundImage":"linear-gradient(to left, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0))"}}></div>
+            <div className="pointer-events-none absolute h-[50%] md:h-[25%] left-0 right-0 bottom-0" style={{"backgroundImage":"linear-gradient(to top, rgba(17, 24, 39, 1), rgba(17, 24, 39, 0))"}}></div>
           </div>
 
-          <div className="items-end flex h-full justify-start relative pt-20 pr-16 pb-0 pl-16 z-[10]">
-            <div className="text-left text-white max-w-xl pt-0 pr-0 pb-20 pl-0 transition-all duration-500">
-              <h1 className="items-end flex font-bold text-left h-36 mb-[12px] drop-shadow-[rgba(0,0,0,0.1)] text-[48px] leading-[48px]">
+          <div className="items-end flex h-full justify-start relative pt-20 px-4 md:px-16 pb-12 md:pb-0 z-[10]">
+            <div className="text-left text-white max-w-xl transition-all duration-500">
+              <h1 className="items-end flex font-bold text-left mb-[12px] drop-shadow-[rgba(0,0,0,0.3)] text-[28px] md:text-[48px] leading-tight md:leading-[48px] line-clamp-2 md:h-36">
                 {currentItem.title}
               </h1>
-              <div className="items-center flex flex-wrap justify-start text-left mb-[16px] text-[14px] gap-[8px] leading-[20px]">
-                <span className="border flex items-center gap-1 text-left border-[rgb(250,_204,_21)] pt-1 pr-2 pb-1 pl-2 rounded-sm">
+              <div className="items-center flex flex-wrap justify-start text-left mb-[16px] text-[12px] md:text-[14px] gap-[8px] leading-[20px]">
+                <span className="border flex items-center gap-1 text-left border-[rgb(250,_204,_21)] pt-0.5 md:pt-1 px-2 rounded-sm">
                   {currentItem.rating}
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-[rgb(250,_204,_21)]">
-                    <path fillRule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clipRule="evenodd" />
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3 md:w-4 md:h-4 text-[rgb(250,_204,_21)]">
+                    <path fillRule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clipRule="evenodd" />
                   </svg>
                 </span>
-                <span className="block text-left bg-[rgba(31,_41,_55,_0.2)]/20 pt-1 pr-2 pb-1 pl-2 rounded-sm">{currentItem.date}</span>
+                <span className="block text-left bg-white/10 px-2 py-0.5 md:py-1 rounded-sm">{currentItem.date}</span>
               </div>
-              <div className="text-left">
+              <div className="text-left hidden md:block">
                 <p className="flow-root overflow-hidden text-left mb-[24px] text-gray-200 line-clamp-3">
                   {currentItem.description}
                 </p>
               </div>
               <div className="flex justify-start text-left gap-[12px]">
-                <Link to={`/novel/${currentItem.href.split('/').pop()}`} className="block font-semibold text-center mb-[16px] border-[rgb(250,_204,_21)] border-[2px] pt-2 pr-6 pb-2 pl-6 rounded-[624.9375rem] hover:bg-[rgb(250,_204,_21)] hover:text-black transition-colors">
+                <Link to={`/novel/${currentItem.href.split('/').pop()}`} className="block font-semibold text-center mb-4 md:mb-16 border-[rgb(250,_204,_21)] border-[2px] py-2 px-6 rounded-full hover:bg-[rgb(250,_204,21)] hover:text-black transition-colors text-sm md:text-base">
                   ĐỌC NGAY
                 </Link>
               </div>
             </div>
           </div>
 
-          {/* Thumbnails */}
-          <div className="flex justify-end absolute w-full bottom-4 pt-0 pr-16 pb-0 pl-16 z-[20]">
+          {/* Thumbnails - Hidden on small mobile, visible on tablet and up */}
+          <div className="hidden sm:flex justify-end absolute w-full bottom-4 px-16 z-[20]">
             <div className="flex overflow-auto gap-[8px] no-scrollbar py-2 px-2">
               {HERO_ITEMS.map((item, index) => (
                 <img 
                   key={index}
                   src={item.imageUrl} 
                   onClick={() => setCurrentIndex(index)}
-                  className={`cursor-pointer block max-w-full object-cover align-middle w-20 h-12 transition-all duration-300 rounded-lg ${index === currentIndex ? 'ring-2 ring-[rgb(250,_204,_21)] scale-110 z-10' : 'opacity-[0.6] hover:opacity-100'}`} 
+                  className={`cursor-pointer block max-w-full object-cover align-middle w-16 h-10 md:w-20 md:h-12 transition-all duration-300 rounded-lg ${index === currentIndex ? 'ring-2 ring-[rgb(250,_204,_21)] scale-110 z-10' : 'opacity-[0.6] hover:opacity-100'}`} 
                   alt={`Thumbnail ${index}`}
                 />
               ))}
             </div>
           </div>
 
-          <div className="absolute h-[200px] left-0 right-0 bottom-0 content-[&quot;&quot;] z-[3]" style={{"backgroundImage":"linear-gradient(0deg, rgb(17, 24, 39), rgba(17, 24, 39, 0))"}}></div>
+          <div className="absolute h-[150px] md:h-[200px] left-0 right-0 bottom-0 z-[3]" style={{"backgroundImage":"linear-gradient(0deg, rgb(17, 24, 39), rgba(17, 24, 39, 0))"}}></div>
         </section>
       </div>
     </section>

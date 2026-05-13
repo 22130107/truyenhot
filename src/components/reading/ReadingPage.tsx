@@ -33,45 +33,38 @@ export default function ReadingPage() {
   ];
 
   return (
-    <div className="text-white text-[16px] leading-[24px]" style={{"fontFamily":"Figtree, ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"","textDecoration":"none","width":"1920px","transform":"scale(1)","margin":"auto"}}>
-      <div className="bg-[rgb(17,_24,_39)] text-[rgb(209,_213,_219)] min-h-[855px]">
-        <div>
-          <div>
-            <ReadingHeader
-              chapterNumber={8}
-              chapterTitle="Chia tay"
-              onToggleSettings={() => setIsSettingsOpen(!isSettingsOpen)}
-            />
+    <div className="text-white text-[16px] leading-[24px] min-h-screen bg-[rgb(17,24,39)]" style={{"fontFamily":"Figtree, ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"","textDecoration":"none"}}>
+      <div className="flex flex-col items-center w-full">
+        <div className="w-full lg:w-[1920px] relative">
+          <ReadingHeader
+            chapterNumber={8}
+            chapterTitle="Chia tay"
+            onToggleSettings={() => setIsSettingsOpen(!isSettingsOpen)}
+          />
 
-            <SettingsPopup 
-              isOpen={isSettingsOpen} 
-              onClose={() => setIsSettingsOpen(false)} 
-            />
+          <SettingsPopup 
+            isOpen={isSettingsOpen} 
+            onClose={() => setIsSettingsOpen(false)} 
+          />
 
-            <div className="ml-auto mr-auto w-full max-w-6xl pt-8 pr-10 pb-8 pl-10">
+          <main className="mt-20 px-4 md:px-10 lg:px-0">
+            <div className="ml-auto mr-auto w-full lg:max-w-6xl pt-8 pb-8">
               <ChapterContent
                 chapterNumber={8}
                 chapterTitle="Chia tay"
                 content={chapterContent}
               />
-
             </div>
 
-            <div className="ml-auto mr-auto w-full max-w-6xl pt-8 pr-10 pb-8 pl-10">
-              <div className="border bg-[rgba(58,_59,_60,_0.6)]/60 border-neutral-800 shadow-[rgba(0,0,0,0)_0px_0px_0px_0px,_rgba(0,0,0,0)_0px_0px_0px_0px,_rgba(0,0,0,0.1)_0px_20px_25px_-5px,_rgba(0,0,0,0.1)_0px_8px_10px_-6px] p-6 rounded-xl">
+            <div className="ml-auto mr-auto w-full lg:max-w-6xl pt-8 pb-8">
+              <div className="border bg-[rgba(58,_59,_60,_0.6)]/60 border-neutral-800 shadow-2xl p-6 rounded-xl">
                 <ChapterSelector currentChapter={8} />
               </div>
             </div>
 
             <CommentSection />
-          </div>
+          </main>
         </div>
-        <section aria-label="Notifications Alt+T"></section>
-        <div className="absolute"></div>
-        <div className="text-left text-[rgb(31,_35,_40)] text-[18px] leading-[27px]" style={{"fontFamily":"\"Segoe UI\", Arial, sans-serif"}}></div>
-        <div></div>
-        <div></div>
-        <div className="pointer-events-none fixed text-left w-[1000px] left-0 top-0 ml-[-500px] text-[rgb(33,_37,_41)] translate-x-[1091px] translate-y-[854px] z-[100000200]" style={{"fontFamily":"-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""}}></div>
       </div>
     </div>
   );

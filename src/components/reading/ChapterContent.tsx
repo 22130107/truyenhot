@@ -16,14 +16,14 @@ export function ChapterContent({
   fontFamily = "Google Sans"
 }: ChapterContentProps) {
   return (
-    <div className="border bg-[rgba(58,_59,_60,_0.6)]/60 border-neutral-800 shadow-[rgba(0,0,0,0)_0px_0px_0px_0px,_rgba(0,0,0,0)_0px_0px_0px_0px,_rgba(0,0,0,0.1)_0px_20px_25px_-5px,_rgba(0,0,0,0.1)_0px_8px_10px_-6px] p-6 rounded-xl">
-      <div className="mb-[32px]">
-        <h1 className="font-bold text-center mb-[16px] text-[30px] leading-[36px]">Chương  {chapterNumber}   : {chapterTitle}</h1>
+    <div className="border bg-[rgba(58,_59,_60,_0.6)]/60 border-neutral-800 shadow-2xl p-4 md:p-6 rounded-xl">
+      <div className="mb-[24px] md:mb-[32px]">
+        <h1 className="font-bold text-center mb-[16px] text-[24px] md:text-[30px] leading-tight md:leading-[36px]">Chương {chapterNumber}: {chapterTitle}</h1>
         <div className="flex justify-center w-full"></div>
       </div>
-      <div className="text-[20px] leading-[32.5px]" style={{"fontFamily":`"${fontFamily}", sans-serif`}}>
+      <div className="text-[18px] md:text-[20px] leading-[28px] md:leading-[32.5px]" style={{"fontFamily":`"${fontFamily}", sans-serif`}}>
         {content.map((paragraph, index) => (
-          <p key={index} className="text-justify whitespace-pre-wrap mb-[24px]">{paragraph}</p>
+          <p key={index} className="text-justify whitespace-pre-wrap mb-[20px] md:mb-[24px]">{paragraph}</p>
         ))}
       </div>
     </div>

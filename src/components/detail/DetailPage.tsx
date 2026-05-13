@@ -62,19 +62,20 @@ export default function DetailPage() {
   ];
 
   return (
-    <div className="text-white text-[16px] leading-[24px]" style={{"fontFamily":"Figtree, ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"","textDecoration":"none","width":"1920px","transform":"scale(1)","margin":"auto"}}>
+    <div className="text-white text-[16px] leading-[24px]" style={{"fontFamily":"Figtree, ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"","textDecoration":"none","width":"100%","maxWidth":"100vw","margin":"auto"}}>
       <div className="bg-[rgb(17,_24,_39)] text-[rgb(209,_213,_219)] min-h-[855px]">
-        <div>
-          <div className="min-h-[855px]">
+        <div className="flex flex-col items-center">
+          {/* Laptop Wrapper with fixed width */}
+          <div className="w-full lg:w-[1920px] min-h-[855px] relative">
             <Header />
 
             <DetailHeroBackground
               imageUrl="https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F886e2673d315d9e33c767740dacc629f7c8e9924.jpg?generation=1778599312007900&amp;alt=media"
             />
 
-            <div className="ml-auto mr-auto relative mt-[-96px] pt-8 pr-4 pb-8 pl-4 z-[10]">
-              <div className="grid mb-[48px] gap-[0px]" style={{"gridTemplateColumns":"repeat(3, minmax(0px, 1fr))"}}>
-                <div style={{"gridArea":"1 / 1 / 2 / 2","order":"1"}}>
+            <div className="ml-auto mr-auto relative mt-[-64px] lg:mt-[-96px] pt-8 px-4 lg:pr-4 lg:pb-8 lg:pl-4 z-[10]">
+              <div className="grid mb-[48px] gap-8 lg:gap-0 grid-cols-1 lg:grid-cols-3">
+                <div className="lg:col-span-1 lg:order-1">
                   <DetailSidebar
                     coverImage="https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2Fb5c9bf32c0910d5e2463867bcaa188f47ab14e10.jpg?generation=1778599312253669&amp;alt=media"
                     title="Hợp Hoan Tông Cấm Tiêu Thụ Cùng Tông"
@@ -87,7 +88,7 @@ export default function DetailPage() {
                   />
                 </div>
 
-                <div className="bg-[rgb(17,_24,_39)] rounded-bl-2xl rounded-br-2xl rounded-tl-[4rem] rounded-tr-2xl shadow-[rgba(0,0,0,0)_0px_0px_0px_0px,_rgba(0,0,0,0)_0px_0px_0px_0px,_rgba(0,0,0,0.1)_0px_10px_15px_-3px,_rgba(0,0,0,0.1)_0px_4px_6px_-4px] p-10" style={{"gridArea":"1 / 2 / 2 / 4","order":"2"}}>
+                <div className="lg:col-span-2 lg:order-2 bg-[rgb(17,_24,_39)] rounded-xl lg:rounded-bl-2xl lg:rounded-br-2xl lg:rounded-tl-[4rem] lg:rounded-tr-2xl shadow-2xl p-6 lg:p-10">
                   <DetailActionButtons
                     readNowUrl={`/novel/${id || 'hop-hoan-tong'}/1`}
                   />
@@ -103,27 +104,29 @@ export default function DetailPage() {
                 </div>
               </div>
 
-              <div className="grid mb-[48px] gap-[32px] pt-0 pr-9 pb-0 pl-0" style={{"gridTemplateColumns":"repeat(3, minmax(0px, 1fr))"}}>
-                <div style={{"gridArea":"1 / 1 / 2 / 2","order":"1"}}>
+              <div className="grid mb-[48px] gap-8 lg:gap-[32px] lg:pr-9 grid-cols-1 lg:grid-cols-3">
+                <div className="lg:col-span-1 lg:order-1">
                   <RatingOverview
                     averageRating={4.0}
                     totalRatings={1}
                     distribution={ratingDistribution}
                   />
-                  <RatingForm />
+                  <div className="mt-8">
+                    <RatingForm />
+                  </div>
                 </div>
 
-                <div style={{"gridArea":"1 / 2 / 2 / 4","order":"2"}}>
+                <div className="lg:col-span-2 lg:order-2">
                   <ChapterList chapters={chapters} />
                 </div>
               </div>
 
               <div className="mb-[48px]">
                 <div className="items-center flex justify-start mb-[32px]">
-                  <h2 className="font-bold mr-[32px] text-[30px] leading-[36px]">Truyện liên quan</h2>
+                  <h2 className="font-bold mr-[32px] text-2xl lg:text-[30px] leading-tight lg:leading-[36px]">Truyện liên quan</h2>
                 </div>
                 <HorizontalScroll>
-                  <div className="h-full relative w-[344.2px] mr-[20px] shrink-[0]">
+                  <div className="h-full relative w-[280px] lg:w-[344.2px] mr-[20px] shrink-[0]">
                     <StoryCard
                       href="https://tiemanvat.com/novel/ga-kim-thoa"
                       imageUrl="https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2Fc41722039088c9f4bcbddb836b6331ab7a2d4eb4.jpg?generation=1778599312067620&amp;alt=media"
@@ -136,7 +139,7 @@ export default function DetailPage() {
                       chapterIconUrl="https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F22a8c165b3aeb2b5e8f07fc74e7d5e0fde6cba00.svg?generation=1778667867842039&amp;alt=media"
                     />
                   </div>
-                  <div className="h-full relative w-[344.2px] mr-[20px] shrink-[0]">
+                  <div className="h-full relative w-[280px] lg:w-[344.2px] mr-[20px] shrink-[0]">
                     <StoryCard
                       href="https://tiemanvat.com/novel/he-thong-mo-phong-gia-toc-tu-tien-bat-djau-tu-con-so-khong"
                       imageUrl="https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F0cfcd56161ba38d291993f73110eed0db3f1c476.jpg?generation=1778599312176347&amp;alt=media"
@@ -149,7 +152,7 @@ export default function DetailPage() {
                       chapterIconUrl="https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F8c97452fb8031b81db8163cd80b47c0d8ffc3e67.svg?generation=1778667867870397&amp;alt=media"
                     />
                   </div>
-                  <div className="h-full relative w-[344.2px] mr-[20px] shrink-[0]">
+                  <div className="h-full relative w-[280px] lg:w-[344.2px] mr-[20px] shrink-[0]">
                     <StoryCard
                       href="https://tiemanvat.com/novel/van-ngheneknpwenwe"
                       imageUrl="https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F094e01d42e3c5ff876f997d62dcf37897869559b.jpg?generation=1778599312137373&amp;alt=media"
@@ -169,12 +172,6 @@ export default function DetailPage() {
             <Footer />
           </div>
         </div>
-        <section aria-label="Notifications Alt+T"></section>
-        <div className="text-left text-[rgb(31,_35,_40)] text-[18px] leading-[27px]" style={{"fontFamily":"\"Segoe UI\", Arial, sans-serif"}}></div>
-        <div></div>
-        <div></div>
-        <div className="absolute"></div>
-        <div className="pointer-events-none fixed text-left w-[1000px] left-0 top-0 ml-[-500px] text-[rgb(33,_37,_41)] translate-x-[1633px] translate-y-[140px] z-[100000200]" style={{"fontFamily":"-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""}}></div>
       </div>
     </div>
   );

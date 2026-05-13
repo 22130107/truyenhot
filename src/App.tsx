@@ -17,8 +17,8 @@ export default function App() {
 
             <HeroSection />
 
-            <section className="pt-4 pr-0 pb-4 pl-0">
-              <div className="ml-auto mr-auto pt-0 pr-16 pb-0 pl-16">
+            <section className="pt-4 pb-4">
+              <div className="ml-auto mr-auto px-4 md:px-16">
                 <SectionHeader
                   title="Truyện được theo dõi"
                 />
@@ -92,11 +92,8 @@ export default function App() {
               </div>
             </section>
 
-            <section className="pt-16 pr-0 pb-16 pl-0">
-              <div className="ml-auto mr-auto pt-0 pr-16 pb-0 pl-16">
-                <SectionHeader
-                  title="Truyện được yêu thích"
-                />
+            <section className="pt-10 md:pt-16 pb-10 md:pb-16">
+              <div className="ml-auto mr-auto px-4 md:px-16">
                 <HorizontalScroll>
                   <div className="h-full relative w-[339.4px] mr-[20px] shrink-[0]">
                     <StoryCard
@@ -167,11 +164,8 @@ export default function App() {
               </div>
             </section>
 
-            <section className="pt-16 pr-0 pb-16 pl-0">
-              <div className="ml-auto mr-auto pt-0 pr-16 pb-0 pl-16">
-                <SectionHeader
-                  title="Truyện được xem nhiều"
-                />
+            <section className="pt-10 md:pt-16 pb-10 md:pb-16">
+              <div className="ml-auto mr-auto px-4 md:px-16">
                 <HorizontalScroll>
                   <div className="h-full relative w-[339.4px] mr-[20px] shrink-[0]">
                     <RankedStoryCard
@@ -237,12 +231,12 @@ export default function App() {
               </div>
             </section>
 
-            <section className="pt-16 pr-0 pb-16 pl-0">
-              <div className="ml-auto mr-auto pt-0 pr-16 pb-0 pl-16">
+            <section className="pt-10 md:pt-16 pb-10 md:pb-16">
+              <div className="ml-auto mr-auto px-4 md:px-16">
                 <SectionHeader
                   title="Truyện mới nhất"
                 />
-                <div className="grid gap-[32px]" style={{"gridTemplateColumns":"repeat(5, minmax(0px, 1fr))"}}>
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-8">
                   <StoryCard
                     href="https://tiemanvat.com/novel/he-thong-mo-phong-gia-toc-tu-tien-bat-djau-tu-con-so-khong"
                     imageUrl="https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F0cfcd56161ba38d291993f73110eed0db3f1c476.jpg?generation=1778599312176347&amp;alt=media"
