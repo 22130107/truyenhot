@@ -45,7 +45,7 @@ export default function LibraryPage() {
   const [activeTab, setActiveTab] = React.useState("Đang đọc");
 
   return (
-    <div className="min-h-screen bg-[rgb(18,18,18)] text-white">
+    <div className="min-h-screen bg-[rgb(31,38,25)] text-white">
       <Header />
       
       <main className="max-w-7xl mx-auto px-8 pt-32 pb-20">
@@ -82,7 +82,7 @@ export default function LibraryPage() {
             
             return (
               <Link key={book.id} to={`/novel/${book.id}`} className="group">
-                <div className="bg-[rgb(28,28,28)] border border-neutral-800 rounded-xl overflow-hidden hover:border-neutral-700 transition-all shadow-xl hover:shadow-2xl">
+                <div className="bg-white border-white rounded-xl overflow-hidden hover:scale-[1.02] transition-all shadow-xl">
                   {/* Image Container with Progress */}
                   <div className="relative aspect-video">
                     <img src={book.imageUrl} alt={book.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
@@ -106,17 +106,17 @@ export default function LibraryPage() {
 
                   {/* Content */}
                   <div className="p-5">
-                    <h3 className="font-bold text-lg mb-1 line-clamp-1 group-hover:text-[rgb(250,204,21)] transition-colors">{book.title}</h3>
-                    <p className="text-sm text-gray-500 mb-6">Tác giả: {book.author}</p>
+                    <h3 className="font-bold text-lg mb-1 line-clamp-1 text-[rgb(31,38,25)] transition-colors">{book.title}</h3>
+                    <p className="text-sm text-[rgb(31,38,25)]/70 mb-6 font-medium">Tác giả: {book.author}</p>
                     
                     <div className="flex justify-between items-center text-sm">
-                      <div className="flex items-center gap-1.5 text-[rgb(250,204,21)] font-medium">
+                      <div className="flex items-center gap-1.5 text-[rgb(31,38,25)] font-bold">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
                           <path fillRule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clipRule="evenodd" />
                         </svg>
                         {book.rating.toFixed(1)}
                       </div>
-                      <div className="flex items-center gap-2 text-gray-500 text-xs">
+                      <div className="flex items-center gap-2 text-[rgb(31,38,25)]/60 text-xs font-medium">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 opacity-50">
                           <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>

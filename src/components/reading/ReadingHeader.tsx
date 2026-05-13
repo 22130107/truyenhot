@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Logo } from '../Logo';
 
 interface ReadingHeaderProps {
   chapterNumber: number;
@@ -9,13 +10,12 @@ interface ReadingHeaderProps {
 
 export function ReadingHeader({ chapterNumber, chapterTitle, onToggleSettings }: ReadingHeaderProps) {
   return (
-    <header className="fixed left-0 top-0 right-0 bg-black/90 backdrop-blur-md border-b border-neutral-800 z-[50] py-3">
+    <header className="fixed left-0 top-0 right-0 bg-black/90 backdrop-blur-md border-b border-neutral-800 z-[50] py-1">
       <div className="w-full px-4 lg:px-8">
         <div className="items-center flex justify-between">
           <div className="items-center flex shrink-0">
-            <Link to="/" className="items-center flex hover:opacity-80 transition-opacity">
-              <img alt="Logo" src="https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2Fbab93d48150f4568f77500303a1a96440e86ac39.png?generation=1778599311903591&amp;alt=media" className="block max-w-full object-cover overflow-clip align-middle w-8 h-8 md:w-10 md:h-10 rounded-full" />
-              <span className="hidden sm:block font-bold ml-[8px] text-[rgb(255,_209,_220)] text-[20px] md:text-[24px] leading-[32px]" style={{"fontFamily":"Itim"}}>Truyenhot</span>
+            <Link to="/" className="items-center flex transition-opacity">
+              <Logo size="custom" customSize="w-20 h-10 md:w-28 md:h-14" />
             </Link>
           </div>
 

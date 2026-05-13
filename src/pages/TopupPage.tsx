@@ -12,7 +12,7 @@ const TOPUP_PACKAGES = [
 
 export default function TopupPage() {
   return (
-    <div className="min-h-screen bg-[rgb(17,24,39)] text-white">
+    <div className="min-h-screen bg-[rgb(31,38,25)] text-white">
       <Header />
       
       <main className="pt-24 pb-16 px-4 md:px-8 max-w-[1920px] mx-auto">

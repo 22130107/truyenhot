@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Logo } from '../components/Logo';
 
 export default function RegisterPage() {
   return (
-    <div className="min-h-screen bg-[rgb(17,24,39)] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-[rgb(31, 38, 25)] flex items-center justify-center p-4">
       {/* Background Decor */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10">
         <div className="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] bg-[rgb(250,204,21)]/10 blur-[120px] rounded-full"></div>
@@ -14,22 +15,21 @@ export default function RegisterPage() {
         {/* Logo */}
         <div className="text-center mb-10">
           <Link to="/" className="inline-flex items-center gap-3">
-            <img src="https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2Fbab93d48150f4568f77500303a1a96440e86ac39.png?generation=1778599311903591&amp;alt=media" className="w-12 h-12 rounded-full" alt="Logo" />
-            <span className="text-3xl font-bold text-[rgb(255,209,220)]" style={{ fontFamily: 'Itim' }}>Truyenhot</span>
+            <Logo size="xl" />
           </Link>
           <h2 className="text-2xl font-bold mt-6 text-white">Tạo tài khoản mới</h2>
           <p className="text-gray-400 mt-2">Bắt đầu hành trình đọc truyện của bạn</p>
         </div>
 
         {/* Register Card */}
-        <div className="bg-[rgb(31,41,55)] border border-neutral-800 rounded-3xl p-8 shadow-2xl">
+        <div className="bg-[rgb(42, 51, 34)] border border-neutral-800 rounded-3xl p-8 shadow-2xl">
           <form className="space-y-5">
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">Họ và Tên</label>
               <input 
                 type="text" 
                 placeholder="Nguyễn Văn A"
-                className="w-full bg-[rgb(17,24,39)] border border-neutral-700 rounded-xl px-4 py-3 text-white focus:border-[rgb(250,204,21)] focus:outline-none transition-colors"
+                className="w-full bg-[rgb(31, 38, 25)] border border-neutral-700 rounded-xl px-4 py-3 text-white focus:border-[rgb(250,204,21)] focus:outline-none transition-colors"
               />
             </div>
 
@@ -38,7 +38,7 @@ export default function RegisterPage() {
               <input 
                 type="email" 
                 placeholder="example@gmail.com"
-                className="w-full bg-[rgb(17,24,39)] border border-neutral-700 rounded-xl px-4 py-3 text-white focus:border-[rgb(250,204,21)] focus:outline-none transition-colors"
+                className="w-full bg-[rgb(31, 38, 25)] border border-neutral-700 rounded-xl px-4 py-3 text-white focus:border-[rgb(250,204,21)] focus:outline-none transition-colors"
               />
             </div>
             
@@ -47,7 +47,7 @@ export default function RegisterPage() {
               <input 
                 type="password" 
                 placeholder="••••••••"
-                className="w-full bg-[rgb(17,24,39)] border border-neutral-700 rounded-xl px-4 py-3 text-white focus:border-[rgb(250,204,21)] focus:outline-none transition-colors"
+                className="w-full bg-[rgb(31, 38, 25)] border border-neutral-700 rounded-xl px-4 py-3 text-white focus:border-[rgb(250,204,21)] focus:outline-none transition-colors"
               />
             </div>
 
@@ -56,12 +56,12 @@ export default function RegisterPage() {
               <input 
                 type="password" 
                 placeholder="••••••••"
-                className="w-full bg-[rgb(17,24,39)] border border-neutral-700 rounded-xl px-4 py-3 text-white focus:border-[rgb(250,204,21)] focus:outline-none transition-colors"
+                className="w-full bg-[rgb(31, 38, 25)] border border-neutral-700 rounded-xl px-4 py-3 text-white focus:border-[rgb(250,204,21)] focus:outline-none transition-colors"
               />
             </div>
 
             <div className="flex items-start">
-              <input type="checkbox" id="terms" className="mt-1 w-4 h-4 rounded border-gray-700 bg-[rgb(17,24,39)] text-[rgb(250,204,21)] focus:ring-0" />
+              <input type="checkbox" id="terms" className="mt-1 w-4 h-4 rounded border-gray-700 bg-[rgb(31, 38, 25)] text-[rgb(250,204,21)] focus:ring-0" />
               <label htmlFor="terms" className="ml-2 text-sm text-gray-400">
                 Tôi đồng ý với <a href="#" className="text-[rgb(250,204,21)] hover:underline">Điều khoản dịch vụ</a> và <a href="#" className="text-[rgb(250,204,21)] hover:underline">Chính sách bảo mật</a>
               </label>

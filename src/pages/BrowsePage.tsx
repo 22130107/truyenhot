@@ -50,7 +50,7 @@ export default function BrowsePage() {
   const { genre } = useParams();
 
   return (
-    <div className="min-h-screen bg-[rgb(18,18,18)] text-white">
+    <div className="min-h-screen bg-[rgb(31,38,25)] text-white">
       <Header />
       
       <main className="max-w-7xl mx-auto px-8 pt-32 pb-20">
@@ -66,7 +66,7 @@ export default function BrowsePage() {
             <input 
               type="text" 
               placeholder="Tìm kiếm theo tên truyện, tác giả, ..." 
-              className="w-full bg-[rgb(28,28,28)] border border-neutral-800 p-4 pl-12 rounded-xl focus:outline-none focus:border-[rgb(250,204,21)] transition-all"
+              className="w-full bg-black border border-neutral-800 p-4 pl-12 rounded-xl focus:outline-none focus:border-[rgb(250,204,21)] transition-all"
             />
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[rgb(250,204,21)] transition-colors">
               <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
@@ -86,7 +86,7 @@ export default function BrowsePage() {
 
             <div className="flex items-center gap-2">
               <span className="text-sm text-gray-400">Sắp xếp theo:</span>
-              <button className="flex items-center gap-8 bg-[rgb(28,28,28)] border border-neutral-800 px-4 py-2 rounded-lg text-sm font-medium hover:border-neutral-700 transition-colors">
+              <button className="flex items-center gap-8 bg-black border border-neutral-800 px-4 py-2 rounded-lg text-sm font-medium hover:border-neutral-700 transition-colors">
                 <span>Mặc định</span>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 text-gray-500">
                   <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />
@@ -100,7 +100,7 @@ export default function BrowsePage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {SEARCH_RESULTS.map((story) => (
             <Link key={story.id} to={`/novel/${story.id}`} className="group">
-              <div className="bg-[rgb(28,28,28)] border border-neutral-800 rounded-xl overflow-hidden hover:border-neutral-600 transition-all shadow-lg hover:shadow-2xl">
+              <div className="bg-white border-white rounded-xl overflow-hidden hover:scale-[1.02] transition-all shadow-lg">
                 <div className="relative aspect-video">
                   <img src={story.imageUrl} alt={story.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   <div className="absolute top-2 right-2 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold text-[rgb(122,213,195)] border border-white/10 uppercase tracking-wider">
@@ -108,13 +108,13 @@ export default function BrowsePage() {
                   </div>
                 </div>
                 <div className="p-5">
-                  <h3 className="font-bold text-lg mb-4 line-clamp-1 group-hover:text-[rgb(250,204,21)] transition-colors">{story.title}</h3>
-                  <div className="flex justify-between items-center text-sm text-gray-400">
+                  <h3 className="font-bold text-lg mb-4 line-clamp-1 text-[rgb(31,38,25)] transition-colors">{story.title}</h3>
+                  <div className="flex justify-between items-center text-sm text-[rgb(31,38,25)]/70 font-medium">
                     <span className="flex items-center gap-1.5">
-                      Lượt xem: <span className="text-gray-200">{story.views}</span>
+                      Lượt xem: <span className="text-[rgb(31,38,25)] font-bold">{story.views}</span>
                     </span>
                     <span className="flex items-center gap-1.5">
-                      Chương <span className="text-gray-200">{story.chapters}</span>: <span className="text-xs italic">đã cập nhật</span>
+                      Chương <span className="text-[rgb(31,38,25)] font-bold">{story.chapters}</span>: <span className="text-xs italic">đã cập nhật</span>
                     </span>
                   </div>
                 </div>

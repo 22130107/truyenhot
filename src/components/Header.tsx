@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Logo } from './Logo';
 
 const GENRES = [
   "Ngôn tình", "Truy thê hỏa táng tràng", "Ngược", "Ngọt sủng",
@@ -33,8 +34,8 @@ export function Header() {
 
   return (
     <>
-      <header className={`fixed left-0 top-0 right-0 transition-all duration-300 z-[999] py-4 ${
-        isScrolled ? 'bg-[#0a0a0a]/95 backdrop-blur-md shadow-lg' : 'bg-transparent'
+      <header className={`fixed left-0 top-0 right-0 transition-all duration-300 z-[999] py-1 ${
+        isScrolled ? 'bg-[rgb(31,38,25)]/95 backdrop-blur-md shadow-lg' : 'bg-transparent'
       }`}>
         <div className="w-full px-4 md:px-8">
           <div className="items-center flex justify-between">
@@ -50,9 +51,8 @@ export function Header() {
                 </svg>
               </button>
 
-              <Link to="/" className="items-center flex hover:opacity-80 transition-opacity">
-                <img alt="Logo" src="https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2Fbab93d48150f4568f77500303a1a96440e86ac39.png?generation=1778599311903591&amp;alt=media" className="block max-w-full object-cover overflow-clip align-middle w-10 h-10 md:w-12 md:h-12 rounded-full" />
-                <span className="block font-bold ml-[8px] text-[rgb(255,_209,_220)] text-[24px] md:text-[30px] leading-tight md:leading-[36px]" style={{"fontFamily":"Itim"}}>Truyenhot</span>
+              <Link to="/" className="items-center flex transition-opacity">
+                <Logo size="custom" customSize="w-24 h-12 md:w-32 md:h-16" />
               </Link>
             </div>
             
@@ -67,7 +67,7 @@ export function Header() {
                 </button>
                 
                 <div className="absolute left-0 top-full pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform group-hover:translate-y-0 translate-y-2 z-[60]">
-                  <div className="bg-[rgb(38,38,38)] border border-neutral-700 rounded-xl shadow-2xl p-6 w-[700px]">
+                  <div className="bg-[rgb(42,51,34)] border border-neutral-700 rounded-xl shadow-2xl p-6 w-[700px]">
                     <div className="grid grid-cols-4 gap-x-8 gap-y-3">
                       {GENRES.map((genre) => (
                         <Link 
@@ -90,7 +90,7 @@ export function Header() {
             <div className="items-center flex gap-2">
               <div className="hidden lg:block grow relative text-white">
                 <div className="relative">
-                  <input type="text" placeholder="Tìm kiếm ..." className="border flex overflow-clip w-48 xl:w-64 h-10 bg-[rgb(31,_31,_31)] border-[rgb(75,_85,_99)] text-[14px] leading-[20px] pt-2 pr-12 pb-2 pl-5 rounded-md focus:border-[rgb(250,204,21)] focus:outline-none transition-colors" />
+                  <input type="text" placeholder="Tìm kiếm ..." className="border flex overflow-clip w-48 xl:w-64 h-10 bg-[rgb(42,51,34)] border-[rgb(75,_85,_99)] text-[14px] leading-[20px] pt-2 pr-12 pb-2 pl-5 rounded-md focus:border-[rgb(250,204,21)] focus:outline-none transition-colors" />
                   <button className="items-center flex font-medium justify-center overflow-hidden absolute text-center whitespace-nowrap h-8 top-[50%] right-1 bg-[rgb(208,_203,_203)] hover:bg-white text-neutral-900 text-[14px] gap-[8px] leading-[20px] pt-0 pr-2 pb-0 pl-2 translate-y-[-50%] rounded-md transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
@@ -116,13 +116,13 @@ export function Header() {
                 <div className="relative group">
                   <button className="flex items-center gap-2 p-1 rounded-full hover:bg-white/10 transition-colors">
                     <img 
-                      src="https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2Fbab93d48150f4568f77500303a1a96440e86ac39.png?generation=1778599311903591&amp;alt=media" 
+                      src="/logo.png" 
                       className="w-10 h-10 rounded-full border-2 border-[rgb(250,204,21)]" 
                       alt="User" 
                     />
                   </button>
                   <div className="absolute right-0 top-full pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-[9999]">
-                    <div className="bg-[rgb(18,18,18)] border border-neutral-800 rounded-lg shadow-2xl w-64 overflow-hidden">
+                    <div className="bg-[rgb(42,51,34)] border border-neutral-800 rounded-lg shadow-2xl w-64 overflow-hidden">
                       {/* User Info Section */}
                       <div className="p-4 border-b border-neutral-800">
                         <div className="font-bold text-white text-lg">Trịnh Huỳnh</div>
@@ -187,11 +187,11 @@ export function Header() {
         />
         
         <div 
-          className={`absolute inset-y-0 left-0 w-80 bg-[#121212] shadow-2xl transform transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}
+          className={`absolute inset-y-0 left-0 w-80 bg-[rgb(31,38,25)] shadow-2xl transform transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}
         >
           <div className="flex flex-col h-full">
-            <div className="p-6 border-b border-neutral-800 flex justify-between items-center bg-[#121212]">
-              <span className="font-bold text-[rgb(255,_209,_220)] text-2xl" style={{"fontFamily":"Itim"}}>Truyenhot</span>
+            <div className="p-6 border-b border-neutral-800 flex justify-between items-center bg-[rgb(31,38,25)]">
+              <Logo size="md" />
               <button 
                 onClick={() => setIsMobileMenuOpen(false)} 
                 className="flex items-center justify-center w-10 h-10 rounded-full bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 transition-all active:scale-90"
@@ -202,7 +202,7 @@ export function Header() {
               </button>
             </div>
             
-            <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-[#121212]">
+            <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-[rgb(31,38,25)]">
               {isLoggedIn && (
                 <div className="p-4 bg-white/5 rounded-xl border border-white/10 mb-2">
                   <div className="font-bold text-white">Trịnh Huỳnh</div>
@@ -259,7 +259,7 @@ export function Header() {
               </div>
             </div>
             
-            <div className="p-6 border-t border-neutral-800 bg-[#121212]">
+            <div className="p-6 border-t border-neutral-800 bg-[rgb(31,38,25)]">
               <div className="flex items-center gap-3 text-gray-500 font-medium p-2 cursor-default">
                 <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
                 Fanpage (Sắp ra mắt)

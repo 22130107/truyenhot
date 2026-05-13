@@ -22,7 +22,7 @@ export function DetailSidebar({
   genre
 }: DetailSidebarProps) {
   return (
-    <div className="bg-[rgb(17,_24,_39)] rounded-bl-2xl rounded-br-2xl rounded-tl-2xl rounded-tr-[4rem] shadow-[rgba(0,0,0,0)_0px_0px_0px_0px,_rgba(0,0,0,0)_0px_0px_0px_0px,_rgba(0,0,0,0.1)_0px_10px_15px_-3px,_rgba(0,0,0,0.1)_0px_4px_6px_-4px] pt-10 pr-4 pb-4 pl-4">
+    <div className="bg-[rgb(10,10,10)] rounded-bl-2xl rounded-br-2xl rounded-tl-2xl rounded-tr-[4rem] shadow-2xl pt-10 pr-4 pb-4 pl-4">
       <div className="sticky top-24">
         <img alt={title} src={coverImage} className="block ml-auto mr-auto overflow-clip align-middle w-full aspect-[auto_300_/_400] shadow-[rgba(0,0,0,0)_0px_0px_0px_0px,_rgba(0,0,0,0)_0px_0px_0px_0px,_rgba(0,0,0,0.1)_0px_10px_15px_-3px,_rgba(0,0,0,0.1)_0px_4px_6px_-4px] text-black/0 max-w-sm rounded-lg" />
         <div className="mt-[24px]">

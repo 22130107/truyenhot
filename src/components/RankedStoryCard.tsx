@@ -35,14 +35,14 @@ export function RankedStoryCard({
           <img alt={title} src={imageUrl} className="block size-full max-w-full object-cover overflow-clip absolute align-middle left-0 top-0 right-0 bottom-0 text-black/0" />
           <div className="absolute left-0 top-0 right-0 bottom-0 bg-black/40 opacity-[0]"></div>
         </div>
-        <div className="items-start flex backdrop-blur-xs p-2">
+        <div className="items-start flex bg-black/80 backdrop-blur-md p-2 rounded-b-xl min-h-[100px]">
           <div className="items-center flex justify-center w-12 h-12 mt-[8px] mr-[8px]">
             <span className="bg-clip-text block italic font-extrabold text-black/0 text-[48px] leading-[48px]" style={{"backgroundImage":"linear-gradient(rgb(253, 224, 71), rgb(202, 138, 4))"}}>{rank}</span>
           </div>
-          <div className="flex flex-col justify-start gap-[4px]">
-            <p className="flow-root font-bold overflow-hidden line-clamp-2">{title}</p>
-            <p className="flow-root truncate text-[12px] leading-[16px]">Dịch giả:  {translator}</p>
-            <p className="font-semibold text-[rgb(156,_163,_175)] text-[14px] leading-[20px]">{date} - {chapters} chương</p>
+          <div className="flex flex-col justify-start gap-[4px] flex-1">
+            <p className="flow-root font-bold overflow-hidden line-clamp-2 h-[40px] leading-[20px]">{title}</p>
+            <p className="flow-root truncate text-[12px] leading-[16px] text-gray-400">Dịch giả:  {translator}</p>
+            <p className="font-semibold text-[rgb(156,_163,_175)] text-[12px] leading-[16px]">{date} - {chapters} ch</p>
           </div>
         </div>
       </div>

@@ -10,9 +10,9 @@ import { Footer } from './components/Footer';
 export default function App() {
   return (
     <div className="text-white text-[16px] leading-[24px] w-full min-h-screen" style={{"fontFamily":"Figtree, ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"","textDecoration":"none","margin":"auto"}}>
-      <div className="bg-[rgb(17,_24,_39)] text-[rgb(209,_213,_219)] min-h-screen">
+      <div className="bg-[rgb(31,38,25)] text-[rgb(209,_213,_219)] min-h-screen">
         <div>
-          <div className="bg-[rgb(17,_24,_39)] min-h-screen">
+          <div className="bg-[rgb(31,38,25)] min-h-screen">
             <Header />
 
             <HeroSection />

@@ -6,7 +6,7 @@
 
 body {
   margin: 0;
-  background-color: rgb(17, 24, 39);
+  background-color: rgb(31, 38, 25);
 }
 
 @layer base {
@@ -16,23 +16,23 @@ body {
   }
 
   ::-webkit-scrollbar-track {
-    background: rgb(17, 24, 39);
+    background: rgb(31, 38, 25);
   }
 
   ::-webkit-scrollbar-thumb {
-    background: rgb(55, 65, 81);
+    background: rgb(62, 76, 50);
     border-radius: 20px;
-    border: 2px solid rgb(17, 24, 39);
+    border: 2px solid rgb(31, 38, 25);
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: rgb(75, 85, 99);
+    background: rgb(84, 103, 67);
   }
 
   /* For Firefox */
   * {
     scrollbar-width: thin;
-    scrollbar-color: rgb(55, 65, 81) rgb(17, 24, 39);
+    scrollbar-color: rgb(62, 76, 50) rgb(31, 38, 25);
   }
 }
 

@@ -77,7 +77,7 @@ export function HeroSection() {
           <div className="pointer-events-none absolute left-0 top-0 right-0 bottom-0">
             <div className="pointer-events-none absolute w-full md:w-[50%] left-0 top-0 bottom-0" style={{"backgroundImage":"linear-gradient(to right, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0))"}}></div>
             <div className="hidden md:block pointer-events-none absolute w-[50%] top-0 right-0 bottom-0" style={{"backgroundImage":"linear-gradient(to left, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0))"}}></div>
-            <div className="pointer-events-none absolute h-[50%] md:h-[25%] left-0 right-0 bottom-0" style={{"backgroundImage":"linear-gradient(to top, rgba(17, 24, 39, 1), rgba(17, 24, 39, 0))"}}></div>
+            <div className="pointer-events-none absolute h-[50%] md:h-[25%] left-0 right-0 bottom-0" style={{"backgroundImage":"linear-gradient(to top, rgba(31, 38, 25, 1), rgba(31, 38, 25, 0))"}}></div>
           </div>
 
           <div className="items-end flex h-full justify-start relative pt-20 px-4 md:px-16 pb-12 md:pb-0 z-[10]">
@@ -122,7 +122,7 @@ export function HeroSection() {
             </div>
           </div>
 
-          <div className="absolute h-[150px] md:h-[200px] left-0 right-0 bottom-0 z-[3]" style={{"backgroundImage":"linear-gradient(0deg, rgb(17, 24, 39), rgba(17, 24, 39, 0))"}}></div>
+          <div className="absolute h-[150px] md:h-[200px] left-0 right-0 bottom-0 z-[3]" style={{"backgroundImage":"linear-gradient(0deg, rgb(31, 38, 25), rgba(31, 38, 25, 0))"}}></div>
         </section>
       </div>
     </section>

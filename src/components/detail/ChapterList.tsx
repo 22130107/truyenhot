@@ -22,7 +22,7 @@ export function ChapterList({ chapters }: ChapterListProps) {
         </button>
       </div>
       <div className="overflow-auto max-h-[598.5px]">
-        <div className="border bg-[rgb(58,_59,_60)] border-neutral-800 shadow-[rgba(0,0,0,0)_0px_0px_0px_0px,_rgba(0,0,0,0)_0px_0px_0px_0px,_rgba(0,0,0,0.05)_0px_1px_2px_0px] rounded-lg">
+        <div className="border bg-[rgb(10,10,10)] border-neutral-800 shadow-xl rounded-lg">
           {chapters.map((chapter, index) => (
             <ChapterListItem
               key={chapter.number}

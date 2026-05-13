@@ -63,7 +63,7 @@ export default function DetailPage() {
 
   return (
     <div className="text-white text-[16px] leading-[24px]" style={{"fontFamily":"Figtree, ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"","textDecoration":"none","width":"100%","maxWidth":"100vw","margin":"auto"}}>
-      <div className="bg-[rgb(17,_24,_39)] text-[rgb(209,_213,_219)] min-h-[855px]">
+      <div className="bg-[rgb(31,38,25)] text-[rgb(209,_213,_219)] min-h-[855px]">
         <div className="flex flex-col items-center">
           {/* Laptop Wrapper with fixed width */}
           <div className="w-full lg:w-[1920px] min-h-[855px] relative">
@@ -88,7 +88,7 @@ export default function DetailPage() {
                   />
                 </div>
 
-                <div className="lg:col-span-2 lg:order-2 bg-[rgb(17,_24,_39)] rounded-xl lg:rounded-bl-2xl lg:rounded-br-2xl lg:rounded-tl-[4rem] lg:rounded-tr-2xl shadow-2xl p-6 lg:p-10">
+                <div className="lg:col-span-2 lg:order-2 bg-[rgb(10,10,10)] rounded-xl lg:rounded-bl-2xl lg:rounded-br-2xl lg:rounded-tl-[4rem] lg:rounded-tr-2xl shadow-2xl p-6 lg:p-10">
                   <DetailActionButtons
                     readNowUrl={`/novel/${id || 'hop-hoan-tong'}/1`}
                   />

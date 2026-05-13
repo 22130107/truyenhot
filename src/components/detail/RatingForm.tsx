@@ -6,7 +6,7 @@ export function RatingForm() {
       <div className="items-center flex h-9 mb-[24px]">
         <h2 className="font-semibold text-[24px] leading-[32px]">Đánh giá của bạn</h2>
       </div>
-      <div className="border bg-[rgb(58,_59,_60)] border-neutral-800 shadow-[rgba(0,0,0,0)_0px_0px_0px_0px,_rgba(0,0,0,0)_0px_0px_0px_0px,_rgba(0,0,0,0.1)_0px_4px_6px_-1px,_rgba(0,0,0,0.1)_0px_2px_4px_-2px] p-6 rounded-lg">
+      <div className="border bg-[rgb(10,10,10)] border-neutral-800 shadow-2xl p-6 rounded-lg">
         <label className="block font-medium mb-[4px] text-[14px] leading-[20px]">Đánh giá</label>
         <div className="flex mb-[16px] gap-[4px]">
           {[...Array(5)].map((_, index) => (
@@ -24,7 +24,7 @@ export function RatingForm() {
           ))}
         </div>
         <label className="block font-medium mb-[4px] text-[14px] leading-[20px]">Nhận xét</label>
-        <textarea rows={2} placeholder="Chia sẻ cảm nhận của bạn..." className="flex overflow-auto resize-none whitespace-pre-wrap w-full bg-[rgb(30,_30,_30)] text-gray-200 text-[14px] leading-[20px] min-h-20 pt-2 pr-3 pb-2 pl-3 rounded-md"></textarea>
+        <textarea rows={2} placeholder="Chia sẻ cảm nhận của bạn..." className="flex overflow-auto resize-none whitespace-pre-wrap w-full bg-[rgb(20,20,20)] text-gray-200 text-[14px] leading-[20px] min-h-20 pt-2 pr-3 pb-2 pl-3 rounded-md"></textarea>
       </div>
     </div>
   );

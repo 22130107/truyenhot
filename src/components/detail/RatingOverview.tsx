@@ -17,7 +17,7 @@ export function RatingOverview({ averageRating, totalRatings, distribution }: Ra
       <div className="items-center flex h-9 mb-[24px]">
         <h2 className="font-semibold text-[24px] leading-[32px]">Đánh giá và nhận xét</h2>
       </div>
-      <div className="border mb-[16px] bg-[rgb(58,_59,_60)] border-neutral-800 shadow-[rgba(0,0,0,0)_0px_0px_0px_0px,_rgba(0,0,0,0)_0px_0px_0px_0px,_rgba(0,0,0,0.1)_0px_4px_6px_-1px,_rgba(0,0,0,0.1)_0px_2px_4px_-2px] p-6 rounded-lg">
+      <div className="border mb-[16px] bg-[rgb(10,10,10)] border-neutral-800 shadow-2xl p-6 rounded-lg">
         <div className="items-center flex mb-[24px]">
           <div className="items-center flex flex-col">
             <span className="block font-bold text-[rgb(250,_204,_21)] text-[48px] leading-[48px]">{averageRating.toFixed(1)}</span>

@@ -31,7 +31,7 @@ export function StoryCard({
 
   return (
     <Link to={`/novel/${slug}`}>
-      <div className="border overflow-hidden bg-[rgb(58,_59,_60)] border-neutral-800 shadow-[rgba(0,0,0,0)_0px_0px_0px_0px,_rgba(0,0,0,0)_0px_0px_0px_0px,_rgba(0,0,0,0.05)_0px_1px_2px_0px] rounded-2xl hover:scale-[1.02] transition-transform duration-300">
+      <div className="border overflow-hidden bg-white border-white shadow-2xl rounded-2xl hover:scale-[1.02] transition-transform duration-300 h-full flex flex-col">
         <div className="overflow-hidden relative">
           <img alt={title} src={imageUrl} className="block max-w-full object-cover overflow-clip align-middle w-full aspect-[3_/_4] text-black/0" />
           <div className="absolute left-0 top-0 right-0 bottom-0 bg-black/40 opacity-[0]"></div>
@@ -42,21 +42,23 @@ export function StoryCard({
             <span className="block font-medium">{rating.toFixed(1)}</span>
           </div>
           <div className="flex absolute left-3 top-3 gap-[8px]">
-            <div className="items-center border flex font-semibold bg-[rgb(39,_71,_53)] border-black/0 text-[rgb(122,_213,_195)] text-[12px] leading-[16px] pt-[2px] pr-[10px] pb-[2px] pl-[10px] rounded-[624.9375rem]">{status}</div>
+            <div className="items-center border flex font-semibold bg-neutral-900/80 backdrop-blur-md border-white/10 text-white text-[12px] leading-[16px] pt-[2px] pr-[10px] pb-[2px] pl-[10px] rounded-[624.9375rem]">{status}</div>
           </div>
         </div>
-        <div className="p-4">
-          <h3 className="flow-root font-semibold overflow-hidden line-clamp-1">{title}</h3>
-          <p className="flow-root overflow-hidden mt-[4px] text-[rgb(163,_163,_163)] text-[12px] leading-[16px]">{author}</p>
-          <div className="flex justify-between mt-[4px] text-[rgb(163,_163,_163)] text-[12px] leading-[16px]">
-            <span className="block flex items-center gap-1">
+        <div className="p-4 flex-1 flex flex-col justify-between">
+          <div>
+            <h3 className="font-bold overflow-hidden line-clamp-2 text-[rgb(31,38,25)] h-[40px] leading-[20px] mb-1">{title}</h3>
+            <p className="flow-root overflow-hidden text-[rgb(31,38,25)]/70 text-[12px] font-medium leading-[16px] truncate">{author}</p>
+          </div>
+          <div className="flex justify-between mt-[4px] text-[rgb(31,38,25)] text-[12px] leading-[16px]">
+            <span className="block flex items-center gap-1 font-medium">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
                 <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
                 <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
               </svg>
               {chapters} chương
             </span>
-            <span className="block bg-[rgb(208,_203,_203)] text-neutral-900 pt-1 pr-2 pb-1 pl-2 rounded-[624.9375rem]">{category}</span>
+            <span className="block bg-[rgb(31,38,25)] text-white pt-1 pr-2 pb-1 pl-2 rounded-[624.9375rem] text-[10px] font-bold">{category}</span>
           </div>
         </div>
       </div>

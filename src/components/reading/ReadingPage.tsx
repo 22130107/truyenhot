@@ -33,7 +33,7 @@ export default function ReadingPage() {
   ];
 
   return (
-    <div className="text-white text-[16px] leading-[24px] min-h-screen bg-[rgb(17,24,39)]" style={{"fontFamily":"Figtree, ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"","textDecoration":"none"}}>
+    <div className="text-white text-[16px] leading-[24px] min-h-screen bg-[rgb(31, 38, 25)]" style={{"fontFamily":"Figtree, ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"","textDecoration":"none"}}>
       <div className="flex flex-col items-center w-full">
         <div className="w-full lg:w-[1920px] relative">
           <ReadingHeader
