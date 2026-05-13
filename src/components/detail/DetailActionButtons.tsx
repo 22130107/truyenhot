@@ -1,5 +1,7 @@
+"use client";
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
+
 
 interface DetailActionButtonsProps {
   readNowUrl: string;
@@ -8,7 +10,7 @@ interface DetailActionButtonsProps {
 export function DetailActionButtons({ readNowUrl }: DetailActionButtonsProps) {
   return (
     <div className="items-center flex flex-wrap justify-start mb-[24px] gap-[12px]">
-      <Link to={readNowUrl} className="block">
+      <Link href={readNowUrl} className="block">
         <button className="items-center flex font-medium justify-center overflow-hidden relative text-center whitespace-nowrap w-full h-12 bg-[rgb(208,_203,_203)] text-neutral-900 text-[20px] gap-[8px] leading-[28px] pt-2 pr-4 pb-2 pl-4 rounded-4xl" style={{"backgroundImage":"linear-gradient(to right, rgb(250, 204, 21), rgb(254, 249, 195))","appearance":"button"}}>
           <span className="block overflow-hidden pointer-events-none absolute text-center left-0 top-0 right-0 bottom-0 rounded-md"></span>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 ml-2">

@@ -1,4 +1,6 @@
-import { Link } from 'react-router-dom';
+"use client";
+import Link from 'next/link';
+
 
 interface ChapterListItemProps {
   number: number;
@@ -10,7 +12,7 @@ interface ChapterListItemProps {
 export function ChapterListItem({ number, url, date, showDivider = true }: ChapterListItemProps) {
   return (
     <div>
-      <Link to={url}>
+      <Link href={url}>
         <div className="items-center flex justify-between p-4 group hover:bg-white/5 transition-colors cursor-pointer">
           <div>
             <h6 className="font-medium group-hover:text-[rgb(250,204,21)] transition-colors">Chương  {number}</h6>

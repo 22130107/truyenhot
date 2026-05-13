@@ -1,6 +1,8 @@
+"use client";
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Logo } from '../Logo';
+import Link from 'next/link';
+
+import { Logo } from '../home/Logo';
 
 interface ReadingHeaderProps {
   chapterNumber: number;
@@ -14,7 +16,7 @@ export function ReadingHeader({ chapterNumber, chapterTitle, onToggleSettings }:
       <div className="w-full px-4 lg:px-8">
         <div className="items-center flex justify-between">
           <div className="items-center flex shrink-0">
-            <Link to="/" className="items-center flex transition-opacity">
+            <Link href="/" className="items-center flex transition-opacity">
               <Logo size="custom" customSize="w-20 h-10 md:w-28 md:h-14" />
             </Link>
           </div>
