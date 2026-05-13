@@ -57,6 +57,5 @@ export function ChapterSelector({ currentChapter }: ChapterSelectorProps) {
         </div>
       </div>
     </div>
-    </div>
   );
 }

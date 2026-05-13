@@ -41,6 +41,5 @@ export function ChapterNavigation({
         </a>
       ) : <div className="flex-1 max-w-[160px]"></div>}
     </div>
-    </div>
   );
 }

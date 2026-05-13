@@ -50,7 +50,14 @@ export default function LoginPage() {
               <label htmlFor="remember" className="ml-2 text-sm text-gray-400">Ghi nhớ đăng nhập</label>
             </div>
 
-            <button className="w-full bg-gradient-to-r from-[rgb(250,204,21)] to-[rgb(254,249,195)] text-neutral-900 font-bold py-3 rounded-xl hover:opacity-90 transition-opacity shadow-lg shadow-[rgb(250,204,21)]/20">
+            <button 
+              type="button"
+              onClick={() => {
+                localStorage.setItem('isLoggedIn', 'true');
+                window.location.href = '/';
+              }}
+              className="w-full bg-gradient-to-r from-[rgb(250,204,21)] to-[rgb(254,249,195)] text-neutral-900 font-bold py-3 rounded-xl hover:opacity-90 transition-opacity shadow-lg shadow-[rgb(250,204,21)]/20 text-center"
+            >
               Đăng Nhập
             </button>
           </form>
