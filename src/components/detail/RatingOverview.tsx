@@ -1,0 +1,58 @@
+import React from 'react';
+
+interface RatingDistribution {
+  label: string;
+  percentage: number;
+}
+
+interface RatingOverviewProps {
+  averageRating: number;
+  totalRatings: number;
+  distribution: RatingDistribution[];
+}
+
+export function RatingOverview({ averageRating, totalRatings, distribution }: RatingOverviewProps) {
+  return (
+    <div className="ml-auto mr-auto mb-[48px] max-w-sm">
+      <div className="items-center flex h-9 mb-[24px]">
+        <h2 className="font-semibold text-[24px] leading-[32px]">Đánh giá và nhận xét</h2>
+      </div>
+      <div className="border mb-[16px] bg-[rgb(58,_59,_60)] border-neutral-800 shadow-[rgba(0,0,0,0)_0px_0px_0px_0px,_rgba(0,0,0,0)_0px_0px_0px_0px,_rgba(0,0,0,0.1)_0px_4px_6px_-1px,_rgba(0,0,0,0.1)_0px_2px_4px_-2px] p-6 rounded-lg">
+        <div className="items-center flex mb-[24px]">
+          <div className="items-center flex flex-col">
+            <span className="block font-bold text-[rgb(250,_204,_21)] text-[48px] leading-[48px]">{averageRating.toFixed(1)}</span>
+            <span className="block text-[rgb(163,_163,_163)] text-[14px] leading-[20px]">{totalRatings}  đánh giá</span>
+          </div>
+          <div className="flex flex-col justify-center ml-[16px]">
+            <div className="flex mb-[4px]">
+              {[...Array(5)].map((_, index) => (
+                <svg
+                  key={index}
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill={index < Math.floor(averageRating) ? "currentColor" : "none"}
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  className={`w-6 h-6 ${index < Math.floor(averageRating) ? 'text-[rgb(250,_204,_21)]' : 'text-gray-500'}`}
+                >
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="mb-[24px]">
+          {distribution.map((item, index) => (
+            <div key={index} className={`items-center flex ${index > 0 ? 'mt-[8px]' : ''}`}>
+              <span className="block w-20 text-[14px] leading-[20px]">{item.label}</span>
+              <div className="grow overflow-hidden relative h-2 ml-[8px] bg-[rgb(55,_65,_81)] basis-[0%] rounded-[624.9375rem]">
+                <div className="absolute h-2 left-0 top-0 bg-[rgb(250,_204,_21)] rounded-[624.9375rem]" style={{"width": `${item.percentage}%`}}></div>
+              </div>
+              <span className="block text-right w-10 ml-[8px] text-[rgb(163,_163,_163)] text-[14px] leading-[20px]">{item.percentage} %</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #1a1a1a;
+}
+
+body {
+  margin: 0;
+  background-color: rgb(17, 24, 39);
+}
+
+@layer base {
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: rgb(17, 24, 39);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgb(55, 65, 81);
+    border-radius: 20px;
+    border: 2px solid rgb(17, 24, 39);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgb(75, 85, 99);
+  }
+
+  /* For Firefox */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(55, 65, 81) rgb(17, 24, 39);
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
