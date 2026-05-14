@@ -4,25 +4,23 @@ import Link from 'next/link';
 
 import { Logo } from './Logo';
 
-const GENRES = [
-  "Ngôn tình", "Truy thê hỏa táng tràng", "Ngược", "Ngọt sủng",
-  "HE", "BE", "SE", "OE",
-  "Thanh mai trúc mã", "1v1", "NP", "Chữa lành",
-  "Thanh xuân vườn trường", "Hiện đại", "Cổ đại", "Tương lai",
-  "Trọng sinh", "Xuyên nhanh", "Linh dị", "Cường thủ đoạt hào",
-  "Hắc ám", "Giam cầm", "Cung đình hầu tước", "Hào môn thế gia",
-  "Cẩu huyết", "Song trọng sinh", "Trùng sinh", "Xuyên sách"
-];
+const GENRES: string[] = []; // Loaded from API
 
 export function Header() {
   const [isScrolled, setIsScrolled] = React.useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
   const [isGenresOpen, setIsGenresOpen] = React.useState(false);
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
-
+  const [genres, setGenres] = React.useState<string[]>([]);
   const [user, setUser] = React.useState<any>(null);
 
   React.useEffect(() => {
+    // Fetch genres từ DB
+    fetch("/api/genres")
+      .then((r) => r.json())
+      .then((data: { name: string }[]) => setGenres(data.map((g) => g.name)))
+      .catch(() => setGenres([]));
+
     const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
     setIsLoggedIn(loggedIn);
     
@@ -87,7 +85,7 @@ export function Header() {
                 <div className="absolute left-0 top-full pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform group-hover:translate-y-0 translate-y-2 z-[60]">
                   <div className="bg-[rgb(42,51,34)] border border-neutral-700 rounded-xl shadow-2xl p-6 w-[700px]">
                     <div className="grid grid-cols-4 gap-x-8 gap-y-3">
-                      {GENRES.map((genre) => (
+                      {genres.map((genre) => (
                         <Link key={genre} 
                           href={`/category/${genre}`} 
                           className="text-gray-300 hover:text-[rgb(250,204,21)] transition-colors text-sm py-1"
@@ -107,12 +105,14 @@ export function Header() {
             <div className="items-center flex gap-2">
               <div className="hidden lg:block grow relative text-white">
                 <div className="relative">
+                  <form onSubmit={(e) => { e.preventDefault(); const val = (e.currentTarget.querySelector('input') as HTMLInputElement).value.trim(); if (val) window.location.href = `/browse?q=${encodeURIComponent(val)}`; else window.location.href = '/browse'; }}>
                   <input type="text" placeholder="Tìm kiếm ..." className="border flex overflow-clip w-48 xl:w-64 h-10 bg-[rgb(42,51,34)] border-[rgb(75,_85,_99)] text-[14px] leading-[20px] pt-2 pr-12 pb-2 pl-5 rounded-md focus:border-[rgb(250,204,21)] focus:outline-none transition-colors" />
-                  <button className="items-center flex font-medium justify-center overflow-hidden absolute text-center whitespace-nowrap h-8 top-[50%] right-1 bg-[rgb(208,_203,_203)] hover:bg-white text-neutral-900 text-[14px] gap-[8px] leading-[20px] pt-0 pr-2 pb-0 pl-2 translate-y-[-50%] rounded-md transition-colors">
+                  <button type="submit" className="items-center flex font-medium justify-center overflow-hidden absolute text-center whitespace-nowrap h-8 top-[50%] right-1 bg-[rgb(208,_203,_203)] hover:bg-white text-neutral-900 text-[14px] gap-[8px] leading-[20px] pt-0 pr-2 pb-0 pl-2 translate-y-[-50%] rounded-md transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
                     </svg>
                   </button>
+                  </form>
                 </div>
               </div>
               
@@ -262,7 +262,7 @@ export function Header() {
                 </button>
                 
                 <div className={`grid grid-cols-2 gap-2 overflow-hidden transition-all duration-300 ${isGenresOpen ? 'max-h-[1000px] opacity-100 mt-3' : 'max-h-0 opacity-0 mt-0'}`}>
-                  {GENRES.map((genre) => (
+                  {genres.map((genre) => (
                     <Link key={genre} 
                       href={`/category/${genre}`}
                       onClick={() => setIsMobileMenuOpen(false)}

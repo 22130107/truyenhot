@@ -1,131 +1,221 @@
 "use client";
-import { useParams } from 'next/navigation';
-import React from 'react';
-import { Header } from '@/components/home/Header';
-import { Footer } from '@/components/home/Footer';
-import Link from 'next/link';
+import React, { useState, useEffect, useCallback } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Header } from "@/components/home/Header";
+import { Footer } from "@/components/home/Footer";
+import Link from "next/link";
 
+interface Novel {
+  id: string;
+  title: string;
+  author: string;
+  coverUrl: string;
+  views: number;
+  chapterCount: number;
+  status: string;
+  rating: number;
+  category: string;
+  updatedAt: string;
+}
 
-const SEARCH_RESULTS = [
-  {
-    id: "van-nghe-chi-thuong",
-    title: "Vân Nghê Chi Thượng",
-    imageUrl: "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F094e01d42e3c5ff876f997d62dcf37897869559b.jpg?generation=1778599312137373&alt=media",
-    views: 5058,
-    chapters: 88,
-    status: "Đã Hoàn Thành"
-  },
-  {
-    id: "ga-kim-thoa",
-    title: "Gả Kim Thoa",
-    imageUrl: "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2Fc41722039088c9f4bcbddb836b6331ab7a2d4eb4.jpg?generation=1778599312067620&alt=media",
-    views: 4823,
-    chapters: 163,
-    status: "Đã Hoàn Thành"
-  },
-  {
-    id: "hop-hoan-tong",
-    title: "Hợp Hoan Tông Cấm Tiêu Thụ Cùng Tông",
-    imageUrl: "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F886e2673d315d9e33c767740dacc629f7c8e9924.jpg?generation=1778599312007900&alt=media",
-    views: 1183,
-    chapters: 127,
-    status: "Đã Hoàn Thành"
-  },
-  {
-    id: "khi-mat-dat-gam-thet",
-    title: "Khi Mặt Đất Gầm Thét",
-    imageUrl: "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F886e2673d315d9e33c767740dacc629f7c8e9924.jpg?generation=1778599312007900&alt=media",
-    views: 941,
-    chapters: 175,
-    status: "Đã Hoàn Thành"
-  },
-  {
-    id: "he-thong-mo-phong-tu-tien",
-    title: "Hệ Thống Mô Phỏng Gia Tộc Tu Tiên: Bắt Đầu T...",
-    imageUrl: "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F0cfcd56161ba38d291993f73110eed0db3f1c476.jpg?generation=1778599312176347&alt=media",
-    views: 214,
-    chapters: 221,
-    status: "Đã Hoàn Thành"
-  }
+const SORT_OPTIONS = [
+  { value: "default",  label: "Mặc định" },
+  { value: "views",    label: "Xem nhiều nhất" },
+  { value: "newest",   label: "Mới nhất" },
+  { value: "chapters", label: "Nhiều chương nhất" },
+];
+
+const STATUS_OPTIONS = [
+  { value: "all",       label: "Tất cả" },
+  { value: "ONGOING",   label: "Đang ra" },
+  { value: "COMPLETED", label: "Hoàn thành" },
+  { value: "PAUSED",    label: "Tạm dừng" },
 ];
 
 export default function BrowsePage() {
-  const params = useParams();
-  const genre = params?.genre as string;
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const [query, setQuery]   = useState(searchParams.get("q") || "");
+  const [sort, setSort]     = useState(searchParams.get("sort") || "default");
+  const [status, setStatus] = useState(searchParams.get("status") || "all");
+
+  const [novels, setNovels]   = useState<Novel[]>([]);
+  const [total, setTotal]     = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  const fetchNovels = useCallback(async (q: string, s: string, st: string) => {
+    setLoading(true);
+    try {
+      const params = new URLSearchParams();
+      if (q)        params.set("q", q);
+      if (s !== "default") params.set("sort", s);
+      if (st !== "all")    params.set("status", st);
+
+      const res = await fetch(`/api/novels/search?${params.toString()}`);
+      const data = await res.json();
+      setNovels(data.novels || []);
+      setTotal(data.total || 0);
+    } catch {
+      setNovels([]);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  // Fetch khi params thay đổi
+  useEffect(() => {
+    const q  = searchParams.get("q") || "";
+    const s  = searchParams.get("sort") || "default";
+    const st = searchParams.get("status") || "all";
+    setQuery(q); setSort(s); setStatus(st);
+    fetchNovels(q, s, st);
+  }, [searchParams, fetchNovels]);
+
+  const applyFilters = (newQ = query, newSort = sort, newStatus = status) => {
+    const params = new URLSearchParams();
+    if (newQ)                params.set("q", newQ);
+    if (newSort !== "default") params.set("sort", newSort);
+    if (newStatus !== "all")   params.set("status", newStatus);
+    router.push(`/browse?${params.toString()}`);
+  };
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    applyFilters();
+  };
+
+  const clearFilters = () => {
+    setQuery(""); setSort("default"); setStatus("all");
+    router.push("/browse");
+  };
+
+  const statusLabel = (s: string) => {
+    if (s === "COMPLETED") return "Hoàn thành";
+    if (s === "PAUSED")    return "Tạm dừng";
+    return "Đang ra";
+  };
 
   return (
     <div className="min-h-screen bg-[rgb(31,38,25)] text-white">
       <Header />
-      
-      <main className="max-w-7xl mx-auto px-8 pt-32 pb-20">
-        {/* Header Section */}
+
+      <main className="max-w-7xl mx-auto px-4 md:px-8 pt-28 pb-20">
+        {/* Header */}
         <div className="flex items-baseline gap-4 mb-8">
-          <h1 className="text-3xl font-bold">Kết quả tìm kiếm</h1>
-          <span className="text-gray-500 text-sm">{SEARCH_RESULTS.length} kết quả</span>
+          <h1 className="text-3xl font-bold">
+            {query ? `Kết quả cho "${query}"` : "Tìm kiếm truyện"}
+          </h1>
+          {!loading && (
+            <span className="text-gray-500 text-sm">{total} kết quả</span>
+          )}
         </div>
 
-        {/* Search Bar Area */}
-        <div className="space-y-6 mb-10">
-          <div className="relative group">
-            <input 
-              type="text" 
-              placeholder="Tìm kiếm theo tên truyện, tác giả, ..." 
-              className="w-full bg-black border border-neutral-800 p-4 pl-12 rounded-xl focus:outline-none focus:border-[rgb(250,204,21)] transition-all"
+        {/* Search + Filter */}
+        <div className="space-y-4 mb-10">
+          {/* Search bar */}
+          <form onSubmit={handleSearch} className="relative group">
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Tìm kiếm theo tên truyện, tác giả, ..."
+              className="w-full bg-black border border-neutral-800 p-4 pl-12 pr-28 rounded-xl focus:outline-none focus:border-[rgb(250,204,21)] transition-all"
             />
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[rgb(250,204,21)] transition-colors">
               <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
             </svg>
-          </div>
+            <button type="submit" className="absolute right-3 top-1/2 -translate-y-1/2 bg-[rgb(208,203,203)] hover:bg-white text-neutral-900 font-bold text-sm px-4 py-2 rounded-lg transition-colors">
+              Tìm
+            </button>
+          </form>
 
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-6">
-              <button className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
-                </svg>
-                <span className="font-medium">Bộ lọc</span>
-              </button>
-              <button className="text-gray-500 hover:text-red-500 text-sm transition-colors">Xóa tất cả bộ lọc</button>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-400">Sắp xếp theo:</span>
-              <button className="flex items-center gap-8 bg-black border border-neutral-800 px-4 py-2 rounded-lg text-sm font-medium hover:border-neutral-700 transition-colors">
-                <span>Mặc định</span>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 text-gray-500">
-                  <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />
-                </svg>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Results Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {SEARCH_RESULTS.map((story) => (
-            <Link key={story.id} href={`/novel/${story.id}`} className="group">
-              <div className="bg-white border-white rounded-xl overflow-hidden hover:scale-[1.02] transition-all shadow-lg">
-                <div className="relative aspect-video">
-                  <img src={story.imageUrl} alt={story.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                  <div className="absolute top-2 right-2 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold text-[rgb(122,213,195)] border border-white/10 uppercase tracking-wider">
-                    {story.status}
-                  </div>
-                </div>
-                <div className="p-5">
-                  <h3 className="font-bold text-lg mb-4 line-clamp-1 text-[rgb(31,38,25)] transition-colors">{story.title}</h3>
-                  <div className="flex justify-between items-center text-sm text-[rgb(31,38,25)]/70 font-medium">
-                    <span className="flex items-center gap-1.5">
-                      Lượt xem: <span className="text-[rgb(31,38,25)] font-bold">{story.views}</span>
-                    </span>
-                    <span className="flex items-center gap-1.5">
-                      Chương <span className="text-[rgb(31,38,25)] font-bold">{story.chapters}</span>: <span className="text-xs italic">đã cập nhật</span>
-                    </span>
-                  </div>
-                </div>
+          {/* Filters row */}
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center gap-3 flex-wrap">
+              {/* Status filter */}
+              <div className="flex items-center gap-1 bg-black border border-neutral-800 rounded-lg p-1">
+                {STATUS_OPTIONS.map((opt) => (
+                  <button
+                    key={opt.value}
+                    onClick={() => { setStatus(opt.value); applyFilters(query, sort, opt.value); }}
+                    className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
+                      status === opt.value
+                        ? "bg-[rgb(250,204,21)] text-black"
+                        : "text-gray-400 hover:text-white"
+                    }`}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
               </div>
-            </Link>
-          ))}
+
+              {(query || sort !== "default" || status !== "all") && (
+                <button onClick={clearFilters} className="text-gray-500 hover:text-red-400 text-sm transition-colors">
+                  Xóa bộ lọc
+                </button>
+              )}
+            </div>
+
+            {/* Sort */}
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-gray-400">Sắp xếp:</span>
+              <select
+                value={sort}
+                onChange={(e) => { setSort(e.target.value); applyFilters(query, e.target.value, status); }}
+                className="bg-black border border-neutral-800 text-white text-sm px-3 py-2 rounded-lg focus:outline-none focus:border-[rgb(250,204,21)] transition-colors appearance-none pr-8 cursor-pointer"
+              >
+                {SORT_OPTIONS.map((opt) => (
+                  <option key={opt.value} value={opt.value}>{opt.label}</option>
+                ))}
+              </select>
+            </div>
+          </div>
         </div>
+
+        {/* Results */}
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="bg-neutral-800 animate-pulse rounded-xl aspect-video" />
+            ))}
+          </div>
+        ) : novels.length === 0 ? (
+          <div className="text-center py-24 text-gray-500">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-12 h-12 mx-auto mb-4 opacity-30">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+            </svg>
+            <p className="text-lg">Không tìm thấy truyện nào</p>
+            {query && <p className="text-sm mt-1">Thử tìm với từ khóa khác</p>}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {novels.map((novel) => (
+              <Link key={novel.id} href={`/novel/${novel.id}`} className="group">
+                <div className="bg-white border-white rounded-xl overflow-hidden hover:scale-[1.02] transition-all shadow-lg">
+                  <div className="relative aspect-video">
+                    <img
+                      src={novel.coverUrl || "/logo.png"}
+                      alt={novel.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute top-2 right-2 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold text-[rgb(122,213,195)] border border-white/10 uppercase tracking-wider">
+                      {statusLabel(novel.status)}
+                    </div>
+                  </div>
+                  <div className="p-5">
+                    <h3 className="font-bold text-lg mb-1 line-clamp-1 text-[rgb(31,38,25)]">{novel.title}</h3>
+                    <p className="text-[rgb(31,38,25)]/60 text-sm mb-3">{novel.author}</p>
+                    <div className="flex justify-between items-center text-sm text-[rgb(31,38,25)]/70 font-medium">
+                      <span>Lượt xem: <span className="text-[rgb(31,38,25)] font-bold">{novel.views.toLocaleString()}</span></span>
+                      <span>Chương <span className="text-[rgb(31,38,25)] font-bold">{novel.chapterCount}</span></span>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
       </main>
 
       <Footer />

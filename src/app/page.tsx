@@ -67,7 +67,7 @@ export default function App() {
 
           {/* Truyện được theo dõi nhiều */}
           <section className="pt-4 pb-4">
-            <div className="ml-auto mr-auto px-4 md:px-16">
+            <div className="max-w-[1920px] mx-auto px-4 md:px-16">
               <SectionHeader title="Truyện được theo dõi" />
               <HorizontalScroll>
                 {l1
@@ -94,7 +94,7 @@ export default function App() {
 
           {/* Truyện xem nhiều nhất */}
           <section className="pt-10 md:pt-16 pb-10 md:pb-16">
-            <div className="ml-auto mr-auto px-4 md:px-16">
+            <div className="max-w-[1920px] mx-auto px-4 md:px-16">
               <SectionHeader title="Truyện được xem nhiều" />
               <HorizontalScroll>
                 {l2
@@ -119,7 +119,7 @@ export default function App() {
 
           {/* Truyện mới nhất */}
           <section className="pt-10 md:pt-16 pb-10 md:pb-16">
-            <div className="ml-auto mr-auto px-4 md:px-16">
+            <div className="max-w-[1920px] mx-auto px-4 md:px-16">
               <SectionHeader title="Truyện mới nhất" />
               {l3 ? (
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-8">

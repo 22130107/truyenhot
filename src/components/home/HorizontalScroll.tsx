@@ -1,5 +1,5 @@
 "use client";
-import React from 'react';
+import React from "react";
 
 interface HorizontalScrollProps {
   children: React.ReactNode;
@@ -8,8 +8,8 @@ interface HorizontalScrollProps {
 export function HorizontalScroll({ children }: HorizontalScrollProps) {
   return (
     <div className="relative w-full">
-      <div className="ml-auto mr-auto overflow-hidden relative w-full z-[1]">
-        <div className="flex size-full relative z-[1]">
+      <div className="overflow-x-auto no-scrollbar w-full">
+        <div className="flex flex-nowrap">
           {children}
         </div>
       </div>
