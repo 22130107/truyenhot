@@ -10,6 +10,7 @@ export function Header() {
   const [isScrolled, setIsScrolled] = React.useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
   const [isGenresOpen, setIsGenresOpen] = React.useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = React.useState(false);
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [genres, setGenres] = React.useState<string[]>([]);
   const [user, setUser] = React.useState<any>(null);
@@ -131,14 +132,22 @@ export function Header() {
               
               {isLoggedIn ? (
                 <div className="relative group">
-                  <button className="flex items-center gap-2 p-1 rounded-full hover:bg-white/10 transition-colors">
+                  <button
+                    onClick={() => setIsUserMenuOpen((open) => !open)}
+                    aria-expanded={isUserMenuOpen}
+                    className="flex items-center gap-2 p-1 rounded-full hover:bg-white/10 transition-colors"
+                  >
                     <img 
                       src="/logo.png" 
                       className="w-10 h-10 rounded-full border-2 border-[rgb(250,204,21)]" 
                       alt="User" 
                     />
                   </button>
-                  <div className="absolute right-0 top-full pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-[9999]">
+                  <div
+                    className={`absolute right-0 top-full pt-2 opacity-0 invisible translate-y-2 transition-all duration-300 z-[9999] md:group-hover:opacity-100 md:group-hover:visible md:group-hover:translate-y-0 ${
+                      isUserMenuOpen ? "opacity-100 visible translate-y-0" : ""
+                    }`}
+                  >
                     <div className="bg-[rgb(42,51,34)] border border-neutral-800 rounded-lg shadow-2xl w-64 overflow-hidden">
                       {/* User Info Section */}
                       <div className="p-4 border-b border-neutral-800">
@@ -148,21 +157,33 @@ export function Header() {
                       
                       {/* Menu Links */}
                       <div className="p-2">
-                        <Link href="/library" className="flex items-center gap-4 px-3 py-2.5 text-gray-300 hover:text-white hover:bg-white/5 rounded-md transition-colors">
+                        <Link
+                          href="/library"
+                          onClick={() => setIsUserMenuOpen(false)}
+                          className="flex items-center gap-4 px-3 py-2.5 text-gray-300 hover:text-white hover:bg-white/5 rounded-md transition-colors"
+                        >
                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
                           </svg>
                           <span className="text-sm">Thư viện của tôi</span>
                         </Link>
                         
-                        <Link href="/profile" className="flex items-center gap-4 px-3 py-2.5 text-gray-300 hover:text-white hover:bg-white/5 rounded-md transition-colors">
+                        <Link
+                          href="/profile"
+                          onClick={() => setIsUserMenuOpen(false)}
+                          className="flex items-center gap-4 px-3 py-2.5 text-gray-300 hover:text-white hover:bg-white/5 rounded-md transition-colors"
+                        >
                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
                           </svg>
                           <span className="text-sm">Trang cá nhân</span>
                         </Link>
                         
-                        <Link href="/topup" className="flex items-center gap-4 px-3 py-2.5 text-gray-300 hover:text-white hover:bg-white/5 rounded-md transition-colors">
+                        <Link
+                          href="/topup"
+                          onClick={() => setIsUserMenuOpen(false)}
+                          className="flex items-center gap-4 px-3 py-2.5 text-gray-300 hover:text-white hover:bg-white/5 rounded-md transition-colors"
+                        >
                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                           </svg>
@@ -172,7 +193,10 @@ export function Header() {
                       
                       {/* Logout */}
                       <div className="p-2 border-t border-neutral-800">
-                        <button onClick={handleLogout} className="flex items-center gap-4 w-full px-3 py-2.5 text-red-500 hover:bg-red-500/10 rounded-md transition-colors">
+                        <button
+                          onClick={() => { setIsUserMenuOpen(false); handleLogout(); }}
+                          className="flex items-center gap-4 w-full px-3 py-2.5 text-red-500 hover:bg-red-500/10 rounded-md transition-colors"
+                        >
                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
                           </svg>
