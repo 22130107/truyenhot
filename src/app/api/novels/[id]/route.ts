@@ -50,6 +50,21 @@ export async function GET(
       [id]
     );
 
+    // Lấy userId từ query param để check đã mua chưa
+    const url = new URL(req.url);
+    const userId = url.searchParams.get("userId");
+    let purchasedChapterIds = new Set<string>();
+    if (userId) {
+      const chapterIds = chapters.map((c) => c.id);
+      if (chapterIds.length > 0) {
+        const [purchases] = await pool.query<RowDataPacket[]>(
+          `SELECT chapterId FROM purchase WHERE userId = ? AND chapterId IN (?)`,
+          [userId, chapterIds]
+        );
+        purchasedChapterIds = new Set(purchases.map((p) => p.chapterId));
+      }
+    }
+
     // Rating distribution
     const [dist] = await pool.query<RowDataPacket[]>(
       `SELECT score, COUNT(*) as cnt
@@ -112,6 +127,7 @@ export async function GET(
         number: c.chapterNumber,
         title: c.title,
         isLocked: c.isLocked,
+        isPurchased: purchasedChapterIds.has(c.id),
         price: c.price,
         date: new Date(c.createdAt).toLocaleDateString("vi-VN"),
       })),

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { ReadingHeader } from "@/components/reading/ReadingHeader";
-import { SettingsPopup } from "@/components/reading/SettingsPopup";
+import { SettingsPopup, ReadingSettings } from "@/components/reading/SettingsPopup";
 import { ChapterContent } from "@/components/reading/ChapterContent";
 import { ChapterSelector } from "@/components/reading/ChapterSelector";
 import { CommentSection } from "@/components/reading/CommentSection";
@@ -27,8 +27,10 @@ export default function ReadingPage() {
   const router = useRouter();
   const novelId = params?.id as string;
   const chapterNum = params?.chapterId as string;
+  const fallbackChapterNumber = Number.isNaN(Number(chapterNum)) ? 0 : parseInt(chapterNum, 10);
 
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [settings, setSettings] = useState<ReadingSettings>({ fontSize: 20, fontFamily: "Google Sans" });
   const [chapter, setChapter] = useState<ChapterData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -70,6 +72,23 @@ export default function ReadingPage() {
   useEffect(() => {
     if (novelId && chapterNum) fetchChapter();
   }, [novelId, chapterNum]);
+
+  // Track reading progress
+  useEffect(() => {
+    if (!chapter || chapter.isLocked && !chapter.isPurchased) return;
+    const userId = getUserId();
+    if (!userId) return;
+    fetch("/api/library/progress", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userId,
+        novelId,
+        lastChapter: chapter.chapterNumber,
+        status: "READING",
+      }),
+    }).catch(() => {});
+  }, [chapter]);
 
   const handlePurchase = async () => {
     const userId = getUserId();
@@ -124,12 +143,18 @@ export default function ReadingPage() {
         <div className="w-full lg:w-[1920px] relative">
 
           <ReadingHeader
+            novelId={novelId}
             chapterNumber={chapter?.chapterNumber ?? parseInt(chapterNum)}
             chapterTitle={chapter?.title ?? ""}
             onToggleSettings={() => setIsSettingsOpen(!isSettingsOpen)}
           />
 
-          <SettingsPopup isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
+          <SettingsPopup
+            isOpen={isSettingsOpen}
+            onClose={() => setIsSettingsOpen(false)}
+            settings={settings}
+            onChange={setSettings}
+          />
 
           <main className="mt-20 px-4 md:px-10 lg:px-0">
             <div className="ml-auto mr-auto w-full lg:max-w-6xl pt-8 pb-8">
@@ -213,6 +238,8 @@ export default function ReadingPage() {
                   chapterNumber={chapter.chapterNumber}
                   chapterTitle={chapter.title}
                   content={contentParagraphs}
+                  fontSize={settings.fontSize}
+                  fontFamily={settings.fontFamily}
                 />
               )}
             </div>
@@ -223,13 +250,18 @@ export default function ReadingPage() {
                 <div className="border bg-[rgba(58,59,60,0.6)] border-neutral-800 shadow-2xl p-6 rounded-xl">
                   <ChapterSelector
                     currentChapter={chapter.chapterNumber}
-                    totalChapters={undefined}
+                    nextChapter={chapter.nextChapter}
                   />
                 </div>
               </div>
             )}
 
-            <CommentSection />
+            {novelId && (chapter?.chapterNumber ?? fallbackChapterNumber) > 0 && (
+              <CommentSection
+                novelId={novelId}
+                chapterNumber={chapter?.chapterNumber ?? fallbackChapterNumber}
+              />
+            )}
           </main>
         </div>
       </div>

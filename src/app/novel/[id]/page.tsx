@@ -30,7 +30,7 @@ interface NovelDetail {
   bookmarkCount: number;
   chapterCount: number;
   genres: string[];
-  chapters: { id: string; number: number; title: string; isLocked: boolean; price: number; date: string }[];
+  chapters: { id: string; number: number; title: string; isLocked: boolean; isPurchased: boolean; price: number; date: string }[];
   distribution: { label: string; percentage: number }[];
   related: { id: string; title: string; author: string; coverUrl: string; status: string; rating: number; chapterCount: number; category: string }[];
 }
@@ -50,7 +50,10 @@ export default function DetailPage() {
   useEffect(() => {
     if (!id) return;
     setLoading(true);
-    fetch(`/api/novels/${id}`)
+    const userId = (() => {
+      try { const raw = localStorage.getItem("user"); return raw ? JSON.parse(raw).id : null; } catch { return null; }
+    })();
+    fetch(`/api/novels/${id}${userId ? `?userId=${userId}` : ""}`)
       .then((r) => r.json())
       .then((data) => {
         if (data.error) setError(data.error);
@@ -172,7 +175,7 @@ export default function DetailPage() {
                           date: c.date,
                           isLocked: c.isLocked,
                           price: c.price,
-                          isPurchased: false, // TODO: check từ user session
+                          isPurchased: c.isPurchased,
                         }))}
                       />
                     ) : null}

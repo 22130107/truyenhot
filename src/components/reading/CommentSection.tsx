@@ -1,54 +1,214 @@
 "use client";
-import React from 'react';
+import React, { useEffect, useState, useRef } from "react";
+
+interface CommentUser {
+  id: string;
+  username: string;
+  avatarUrl: string | null;
+}
 
 interface Comment {
   id: string;
-  author: string;
-  avatar: string;
   content: string;
-  timestamp: string;
+  createdAt: string;
+  user: CommentUser;
 }
 
 interface CommentSectionProps {
-  comments?: Comment[];
+  novelId: string;
+  chapterNumber: number;
 }
 
-export function CommentSection({ comments = [] }: CommentSectionProps) {
+function getUser(): { id: string; username: string; avatarUrl?: string } | null {
+  try {
+    const raw = localStorage.getItem("user");
+    return raw ? JSON.parse(raw) : null;
+  } catch { return null; }
+}
+
+function timeAgo(dateStr: string) {
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const m = Math.floor(diff / 60000);
+  if (m < 1) return "Vừa xong";
+  if (m < 60) return `${m} phút trước`;
+  const h = Math.floor(m / 60);
+  if (h < 24) return `${h} giờ trước`;
+  const d = Math.floor(h / 24);
+  if (d < 30) return `${d} ngày trước`;
+  return new Date(dateStr).toLocaleDateString("vi-VN");
+}
+
+export function CommentSection({ novelId, chapterNumber }: CommentSectionProps) {
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [text, setText] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const currentUser = typeof window !== "undefined" ? getUser() : null;
+
+  useEffect(() => {
+    if (!novelId || !chapterNumber) return;
+    setLoading(true);
+    fetch(`/api/novels/${novelId}/chapters/${chapterNumber}/comments`)
+      .then((r) => r.json())
+      .then((data) => setComments(Array.isArray(data) ? data : []))
+      .catch(() => setComments([]))
+      .finally(() => setLoading(false));
+  }, [novelId, chapterNumber]);
+
+  const handleSubmit = async () => {
+    const user = getUser();
+    if (!user) { setError("Bạn cần đăng nhập để bình luận"); return; }
+    if (!text.trim()) return;
+    setSubmitting(true);
+    setError("");
+    try {
+      const res = await fetch(`/api/novels/${novelId}/chapters/${chapterNumber}/comments`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: user.id, content: text.trim() }),
+      });
+      const data = await res.json();
+      if (!res.ok) { setError(data.error || "Lỗi gửi bình luận"); return; }
+      setComments((prev) => [data, ...prev]);
+      setText("");
+    } catch {
+      setError("Lỗi kết nối");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleDelete = async (commentId: string) => {
+    const user = getUser();
+    if (!user) return;
+    await fetch(`/api/novels/${novelId}/chapters/${chapterNumber}/comments`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId: user.id, commentId }),
+    });
+    setComments((prev) => prev.filter((c) => c.id !== commentId));
+  };
+
   return (
-    <div className="ml-auto mr-auto w-full max-w-6xl pt-8 pr-10 pb-8 pl-10">
-      <div className="items-center flex mb-[20px] gap-[8px]">
-        <div className="fill-none overflow-hidden align-middle w-5 h-5 mb-[4px]">
-          <img src="https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2Fc5717b98f526a21cc57526ac8eeed08792f47729.svg?generation=1778670420954249&amp;alt=media" className="block size-full" />
-        </div>
-        <h2 className="font-semibold mb-[4px] text-[20px] leading-[28px]">Bình luận</h2>
+    <div className="ml-auto mr-auto w-full max-w-6xl px-4 md:px-10 pt-8 pb-12">
+      {/* Header */}
+      <div className="flex items-center gap-2 mb-6">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 text-gray-400">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z" />
+        </svg>
+        <h2 className="font-semibold text-[20px] leading-[28px]">
+          Bình luận
+          {!loading && <span className="ml-2 text-sm font-normal text-neutral-400">({comments.length})</span>}
+        </h2>
       </div>
-      <div className="text-gray-200 p-6 rounded-xl">
-        <div className="flex mb-[24px] gap-[12px]">
-          <div className="grow basis-[0%]">
-            <textarea rows={2} placeholder="Viết bình luận của bạn..." className="flex overflow-auto resize-none whitespace-pre-wrap w-full h-[82px] bg-[rgb(36,_37,_38)] text-white text-[14px] leading-[20px] min-h-20 pt-2 pr-3 pb-2 pl-3 rounded-xl" style={{"backgroundImage":"linear-gradient(to right, rgb(88, 28, 135), rgb(131, 24, 67))"}}></textarea>
+
+      {/* Input */}
+      <div className="mb-6">
+        <div className="flex gap-3">
+          {/* Avatar */}
+          <div className="shrink-0 w-9 h-9 rounded-full bg-neutral-700 overflow-hidden flex items-center justify-center">
+            {currentUser?.avatarUrl ? (
+              <img src={currentUser.avatarUrl} alt="" className="w-full h-full object-cover" />
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 text-neutral-400">
+                <path d="M10 8a3 3 0 100-6 3 3 0 000 6zM3.465 14.493a1.23 1.23 0 00.41 1.412A9.957 9.957 0 0010 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 00-13.074.003z" />
+              </svg>
+            )}
+          </div>
+
+          <div className="flex-1">
+            <textarea
+              ref={textareaRef}
+              rows={2}
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) handleSubmit(); }}
+              placeholder={currentUser ? "Viết bình luận của bạn... (Ctrl+Enter để gửi)" : "Đăng nhập để bình luận"}
+              disabled={!currentUser || submitting}
+              className="w-full bg-[rgb(36,37,38)] border border-neutral-700 text-white text-[14px] leading-[20px] px-3 py-2.5 rounded-xl resize-none focus:outline-none focus:border-[rgb(250,204,21)] transition-colors disabled:opacity-50 placeholder:text-neutral-500"
+            />
+            {error && <p className="text-red-400 text-xs mt-1">{error}</p>}
+            <div className="flex justify-end mt-2">
+              <button
+                onClick={handleSubmit}
+                disabled={!currentUser || !text.trim() || submitting}
+                className="flex items-center gap-2 bg-[rgb(250,204,21)] hover:bg-yellow-300 disabled:opacity-40 disabled:cursor-not-allowed text-black text-[13px] font-bold px-4 py-2 rounded-lg transition-all"
+              >
+                {submitting ? (
+                  <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                  </svg>
+                ) : (
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
+                    <path d="M3.105 2.289a.75.75 0 00-.826.95l1.414 4.925A1.5 1.5 0 005.135 9.25h6.115a.75.75 0 010 1.5H5.135a1.5 1.5 0 00-1.442 1.086l-1.414 4.926a.75.75 0 00.826.95 28.896 28.896 0 0015.293-7.154.75.75 0 000-1.115A28.897 28.897 0 003.105 2.289z" />
+                  </svg>
+                )}
+                Gửi
+              </button>
+            </div>
           </div>
         </div>
-        {comments.length === 0 ? (
-          <p className="text-center text-[rgb(156,_163,_175)]">Chưa có bình luận nào.</p>
-        ) : (
-          <div className="space-y-4">
-            {comments.map((comment) => (
-              <div key={comment.id} className="border-b border-neutral-800 pb-4">
-                <div className="flex gap-3">
-                  <img src={comment.avatar} alt={comment.author} className="w-10 h-10 rounded-full" />
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="font-semibold">{comment.author}</span>
-                      <span className="text-[rgb(163,_163,_163)] text-[12px]">{comment.timestamp}</span>
-                    </div>
-                    <p className="text-[rgb(209,_213,_219)]">{comment.content}</p>
-                  </div>
-                </div>
+      </div>
+
+      {/* Comments list */}
+      {loading ? (
+        <div className="space-y-4">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="flex gap-3 animate-pulse">
+              <div className="w-9 h-9 rounded-full bg-neutral-800 shrink-0" />
+              <div className="flex-1 space-y-2">
+                <div className="h-3 bg-neutral-800 rounded w-24" />
+                <div className="h-4 bg-neutral-800 rounded w-full" />
+                <div className="h-4 bg-neutral-800 rounded w-3/4" />
               </div>
-            ))}
-          </div>
-        )}
-      </div>
+            </div>
+          ))}
+        </div>
+      ) : comments.length === 0 ? (
+        <p className="text-center text-neutral-500 py-8">Chưa có bình luận nào. Hãy là người đầu tiên!</p>
+      ) : (
+        <div className="space-y-5">
+          {comments.map((comment) => (
+            <div key={comment.id} className="flex gap-3 group">
+              {/* Avatar */}
+              <div className="shrink-0 w-9 h-9 rounded-full bg-neutral-700 overflow-hidden flex items-center justify-center">
+                {comment.user.avatarUrl ? (
+                  <img src={comment.user.avatarUrl} alt={comment.user.username} className="w-full h-full object-cover" />
+                ) : (
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 text-neutral-400">
+                    <path d="M10 8a3 3 0 100-6 3 3 0 000 6zM3.465 14.493a1.23 1.23 0 00.41 1.412A9.957 9.957 0 0010 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 00-13.074.003z" />
+                  </svg>
+                )}
+              </div>
+
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="font-semibold text-[14px] text-white">{comment.user.username}</span>
+                  <span className="text-neutral-500 text-[12px]">{timeAgo(comment.createdAt)}</span>
+                </div>
+                <p className="text-[rgb(209,213,219)] text-[14px] leading-relaxed whitespace-pre-wrap break-words">{comment.content}</p>
+              </div>
+
+              {/* Xóa (chỉ hiện với chủ comment) */}
+              {currentUser?.id === comment.user.id && (
+                <button
+                  onClick={() => handleDelete(comment.id)}
+                  className="opacity-0 group-hover:opacity-100 transition-opacity p-1 text-neutral-500 hover:text-red-400 shrink-0 self-start mt-0.5"
+                  title="Xóa bình luận"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
+                    <path fillRule="evenodd" d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z" clipRule="evenodd" />
+                  </svg>
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

@@ -64,10 +64,10 @@ export default function CategoryPage() {
     s === "COMPLETED" ? "Hoàn thành" : s === "PAUSED" ? "Tạm dừng" : "Đang ra";
 
   return (
-    <div className="min-h-screen bg-[rgb(31,38,25)] text-white">
+    <div className="min-h-screen bg-[rgb(31,38,25)] text-white flex flex-col">
       <Header />
 
-      <main className="max-w-7xl mx-auto px-4 md:px-8 pt-28 pb-20">
+      <main className="max-w-7xl mx-auto px-4 md:px-8 pt-28 pb-20 flex-1 w-full">
         {/* Header */}
         <div className="flex items-baseline gap-4 mb-8">
           <h1 className="text-3xl font-bold">Thể loại: <span className="text-yellow-400">{genre}</span></h1>

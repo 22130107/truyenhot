@@ -22,7 +22,7 @@ export function ChapterContent({
         <h1 className="font-bold text-center mb-[16px] text-[24px] md:text-[30px] leading-tight md:leading-[36px]">Chương {chapterNumber}: {chapterTitle}</h1>
         <div className="flex justify-center w-full"></div>
       </div>
-      <div className="text-[18px] md:text-[20px] leading-[28px] md:leading-[32.5px]" style={{"fontFamily":`"${fontFamily}", sans-serif`}}>
+      <div style={{ fontSize: `${fontSize}px`, lineHeight: 1.8, fontFamily: `"Google Sans", sans-serif` }}>
         {content.map((paragraph, index) => (
           <p key={index} className="text-justify whitespace-pre-wrap mb-[20px] md:mb-[24px]">{paragraph}</p>
         ))}

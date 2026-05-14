@@ -197,21 +197,23 @@ function BrowseContent() {
 
 export default function BrowsePage() {
   return (
-    <div className="min-h-screen bg-[rgb(31,38,25)] text-white">
+    <div className="min-h-screen bg-[rgb(31,38,25)] text-white flex flex-col">
       <Header />
-      <Suspense
-        fallback={
-          <main className="max-w-7xl mx-auto px-4 md:px-8 pt-28 pb-20">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="bg-neutral-800 animate-pulse rounded-xl aspect-video" />
-              ))}
-            </div>
-          </main>
-        }
-      >
-        <BrowseContent />
-      </Suspense>
+      <div className="flex-1">
+        <Suspense
+          fallback={
+            <main className="max-w-7xl mx-auto px-4 md:px-8 pt-28 pb-20">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div key={i} className="bg-neutral-800 animate-pulse rounded-xl aspect-video" />
+                ))}
+              </div>
+            </main>
+          }
+        >
+          <BrowseContent />
+        </Suspense>
+      </div>
       <Footer />
     </div>
   );
