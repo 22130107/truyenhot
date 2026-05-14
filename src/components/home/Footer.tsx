@@ -13,30 +13,22 @@ export function Footer() {
           <div className="grid gap-[16px]" style={{"gridTemplateColumns":"repeat(4, minmax(0px, 1fr))","gridArea":"1 / 2 / 2 / 6"}}>
             <div className="items-center flex justify-start" style={{"gridArea":"1 / 1 / 2 / 2"}}>
               <ul>
-                <li className="list-none">
-                  <a href="https://tiemanvat.com/help" className="text-white">Trung tâm hỗ trợ</a>
-                </li>
+                <li className="list-none text-white">Trung tâm hỗ trợ</li>
               </ul>
             </div>
             <div className="items-center flex justify-start" style={{"gridArea":"1 / 2 / 2 / 3"}}>
               <ul>
-                <li className="list-none">
-                  <a href="https://tiemanvat.com/contact" className="text-white">Liên hệ với chúng tôi</a>
-                </li>
+                <li className="list-none text-white">Liên hệ với chúng tôi</li>
               </ul>
             </div>
             <div className="items-center flex justify-start" style={{"gridArea":"1 / 3 / 2 / 4"}}>
               <ul>
-                <li className="list-none">
-                  <a href="https://tiemanvat.com/terms" className="text-white">Điều khoản & Điều kiện</a>
-                </li>
+                <li className="list-none text-white">Điều khoản & Điều kiện</li>
               </ul>
             </div>
             <div className="items-center flex justify-start" style={{"gridArea":"1 / 4 / 2 / 5"}}>
               <ul>
-                <li className="list-none">
-                  <a href="https://tiemanvat.com/policy" className="text-white">Chính sách dịch vụ</a>
-                </li>
+                <li className="list-none text-white">Chính sách dịch vụ</li>
               </ul>
             </div>
           </div>
