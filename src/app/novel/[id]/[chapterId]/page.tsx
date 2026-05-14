@@ -93,7 +93,7 @@ export default function ReadingPage() {
   const handlePurchase = async () => {
     const userId = getUserId();
     if (!userId) {
-      router.push("/login");
+      setPurchaseError("Bạn cần đăng nhập để mua chương.");
       return;
     }
     setPurchasing(true);
