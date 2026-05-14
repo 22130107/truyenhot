@@ -95,6 +95,7 @@ export default function App() {
 
             <section className="pt-10 md:pt-16 pb-10 md:pb-16">
               <div className="ml-auto mr-auto px-4 md:px-16">
+                <SectionHeader title="Truyện được yêu thích" />
                 <HorizontalScroll>
                   <div className="h-full relative w-[339.4px] mr-[20px] shrink-[0]">
                     <StoryCard
@@ -167,6 +168,7 @@ export default function App() {
 
             <section className="pt-10 md:pt-16 pb-10 md:pb-16">
               <div className="ml-auto mr-auto px-4 md:px-16">
+                <SectionHeader title="Truyện được xem nhiều" />
                 <HorizontalScroll>
                   <div className="h-full relative w-[339.4px] mr-[20px] shrink-[0]">
                     <RankedStoryCard
