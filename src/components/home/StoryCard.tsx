@@ -35,7 +35,13 @@ export function StoryCard({
     <Link href={`/novel/${slug}`}>
       <div className="border overflow-hidden bg-white border-white shadow-2xl rounded-2xl hover:scale-[1.02] transition-transform duration-300 h-full flex flex-col">
         <div className="overflow-hidden relative">
-          <img alt={title} src={imageUrl} className="block max-w-full object-cover overflow-clip align-middle w-full aspect-[3_/_4] text-black/0" />
+          <div className="relative w-full aspect-[3_/_4]">
+            <img
+              alt={title}
+              src={imageUrl}
+              className="absolute inset-0 w-full h-full object-cover object-top"
+            />
+          </div>
           <div className="absolute left-0 top-0 right-0 bottom-0 bg-black/40 opacity-[0]"></div>
           <div className="items-center flex absolute top-3 right-3 backdrop-blur-sm bg-white/90 shadow-[rgba(0,0,0,0)_0px_0px_0px_0px,_rgba(0,0,0,0)_0px_0px_0px_0px,_rgba(0,0,0,0.1)_0px_1px_3px_0px,_rgba(0,0,0,0.1)_0px_1px_2px_-1px] text-[14px] gap-[4px] leading-[20px] pt-1 pr-2 pb-1 pl-2 rounded-[624.9375rem]">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-[rgb(250,_204,_21)]">
