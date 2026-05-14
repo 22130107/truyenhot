@@ -24,10 +24,12 @@ export default function AdminEditNovelPage() {
 
   const [coverUrl, setCoverUrl] = useState("");
   const [uploadingCover, setUploadingCover] = useState(false);
+  const [coverFit, setCoverFit] = useState<"cover" | "contain">("cover");
   const coverInputRef = useRef<HTMLInputElement>(null);
 
   const [posterUrl, setPosterUrl] = useState("");
   const [uploadingPoster, setUploadingPoster] = useState(false);
+  const [posterFit, setPosterFit] = useState<"cover" | "contain">("cover");
   const posterInputRef = useRef<HTMLInputElement>(null);
 
   const [title, setTitle] = useState("");
@@ -286,7 +288,7 @@ export default function AdminEditNovelPage() {
                 <div className="flex gap-4">
                   <div className="w-24 h-36 bg-neutral-800 rounded-lg flex items-center justify-center border border-neutral-700 flex-shrink-0 overflow-hidden relative">
                     {coverUrl ? (
-                      <img src={coverUrl} alt="Cover" className="w-full h-full object-cover" />
+                      <img src={coverUrl} alt="Cover" className="w-full h-full" style={{ objectFit: coverFit }} />
                     ) : (
                       <ImageIcon className="w-6 h-6 text-neutral-600" />
                     )}
@@ -294,6 +296,17 @@ export default function AdminEditNovelPage() {
                       <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
                         <div className="w-5 h-5 border-2 border-yellow-400 border-t-transparent rounded-full animate-spin"></div>
                       </div>
+                    )}
+                    {/* Toggle fit button */}
+                    {coverUrl && (
+                      <button
+                        type="button"
+                        onClick={() => setCoverFit(f => f === "cover" ? "contain" : "cover")}
+                        title={coverFit === "cover" ? "Đang cắt vừa khung — nhấn để hiện toàn ảnh" : "Đang hiện toàn ảnh — nhấn để cắt vừa khung"}
+                        className="absolute bottom-1 right-1 bg-black/70 hover:bg-black text-white rounded px-1.5 py-0.5 text-[10px] font-medium transition-colors"
+                      >
+                        {coverFit === "cover" ? "Cắt" : "Vừa"}
+                      </button>
                     )}
                   </div>
                   <div className="flex-1 space-y-3">
@@ -328,7 +341,7 @@ export default function AdminEditNovelPage() {
                 <div className="flex flex-col gap-4">
                   <div className="w-full h-36 bg-neutral-800 rounded-lg flex items-center justify-center border border-neutral-700 overflow-hidden relative">
                     {posterUrl ? (
-                      <img src={posterUrl} alt="Poster" className="w-full h-full object-cover" />
+                      <img src={posterUrl} alt="Poster" className="w-full h-full" style={{ objectFit: posterFit }} />
                     ) : (
                       <ImageIcon className="w-8 h-8 text-neutral-600" />
                     )}
@@ -336,6 +349,17 @@ export default function AdminEditNovelPage() {
                       <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
                         <div className="w-6 h-6 border-2 border-yellow-400 border-t-transparent rounded-full animate-spin"></div>
                       </div>
+                    )}
+                    {/* Toggle fit button */}
+                    {posterUrl && (
+                      <button
+                        type="button"
+                        onClick={() => setPosterFit(f => f === "cover" ? "contain" : "cover")}
+                        title={posterFit === "cover" ? "Đang cắt vừa khung — nhấn để hiện toàn ảnh" : "Đang hiện toàn ảnh — nhấn để cắt vừa khung"}
+                        className="absolute bottom-2 right-2 bg-black/70 hover:bg-black text-white rounded px-2 py-1 text-[11px] font-medium transition-colors"
+                      >
+                        {posterFit === "cover" ? "Cắt" : "Vừa"}
+                      </button>
                     )}
                   </div>
                   <div className="flex gap-3">

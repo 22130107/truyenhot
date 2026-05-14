@@ -1,11 +1,15 @@
 "use client";
-import React from 'react';
-import { ChapterListItem } from './ChapterListItem';
+import React, { useState } from "react";
+import { ChapterListItem } from "./ChapterListItem";
 
 interface Chapter {
   number: number;
+  title?: string;
   url: string;
   date: string;
+  isLocked?: boolean;
+  price?: number;
+  isPurchased?: boolean;
 }
 
 interface ChapterListProps {
@@ -13,26 +17,47 @@ interface ChapterListProps {
 }
 
 export function ChapterList({ chapters }: ChapterListProps) {
+  const [sortAsc, setSortAsc] = useState(true);
+
+  const sorted = sortAsc ? [...chapters] : [...chapters].reverse();
+
   return (
-    <div className="mb-[48px]">
-      <div className="items-center flex justify-between mb-[24px]">
-        <h2 className="font-semibold text-[24px] leading-[32px]">Danh sách chương</h2>
-        <button className="items-center flex font-medium justify-center overflow-hidden relative text-center whitespace-nowrap h-9 bg-black/0 text-[14px] gap-[8px] leading-[20px] pt-0 pr-3 pb-0 pl-3 rounded-md" style={{"appearance":"button"}}>
-          <span className="block overflow-hidden pointer-events-none absolute text-center left-0 top-0 right-0 bottom-0 rounded-md"></span>
-          Sắp xếp:  Cũ nhất
+    <div className="mb-12">
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="font-semibold text-[24px] leading-[32px]">
+          Danh sách chương
+          <span className="ml-2 text-sm font-normal text-neutral-400">({chapters.length} chương)</span>
+        </h2>
+        <button
+          onClick={() => setSortAsc(!sortAsc)}
+          className="flex items-center gap-1.5 text-sm font-medium text-neutral-400 hover:text-white transition-colors px-3 py-1.5 rounded-lg hover:bg-white/5"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M3 7.5L7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
+          </svg>
+          {sortAsc ? "Cũ nhất" : "Mới nhất"}
         </button>
       </div>
-      <div className="overflow-auto max-h-[598.5px]">
+
+      <div className="overflow-auto max-h-[598.5px] custom-scrollbar">
         <div className="border bg-[rgb(10,10,10)] border-neutral-800 shadow-xl rounded-lg">
-          {chapters.map((chapter, index) => (
-            <ChapterListItem
-              key={chapter.number}
-              number={chapter.number}
-              url={chapter.url}
-              date={chapter.date}
-              showDivider={index < chapters.length - 1}
-            />
-          ))}
+          {sorted.length === 0 ? (
+            <div className="p-8 text-center text-neutral-500 text-sm">Chưa có chương nào</div>
+          ) : (
+            sorted.map((chapter, index) => (
+              <ChapterListItem
+                key={chapter.number}
+                number={chapter.number}
+                title={chapter.title}
+                url={chapter.url}
+                date={chapter.date}
+                isLocked={chapter.isLocked}
+                price={chapter.price}
+                isPurchased={chapter.isPurchased}
+                showDivider={index < sorted.length - 1}
+              />
+            ))
+          )}
         </div>
       </div>
     </div>

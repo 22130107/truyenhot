@@ -65,9 +65,9 @@ export default function AdminLayout({
   ];
 
   return (
-    <div className="flex h-screen bg-[#0a0a0a] text-white overflow-hidden font-sans">
+    <div className="flex min-h-screen bg-[#0a0a0a] text-white font-sans">
       {/* Sidebar for Desktop */}
-      <aside className="hidden md:flex w-64 flex-col bg-[#111] border-r border-neutral-800 transition-all duration-300">
+      <aside className="hidden md:flex w-64 flex-col bg-[#111] border-r border-neutral-800 fixed top-0 left-0 h-screen z-30">
         <div className="h-16 flex items-center px-6 border-b border-neutral-800">
           <Link href="/" className="flex items-center gap-2">
             <span className="text-xl font-bold text-yellow-400">Truyenhot</span>
@@ -104,7 +104,7 @@ export default function AdminLayout({
       </aside>
 
       {/* Mobile Header & Content */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+      <div className="flex-1 flex flex-col min-w-0 md:ml-64">
         <header className="md:hidden h-16 flex items-center justify-between px-4 border-b border-neutral-800 bg-[#111]">
           <Link href="/admin" className="text-xl font-bold text-yellow-400">
             Truyenhot Admin
@@ -141,7 +141,7 @@ export default function AdminLayout({
           </nav>
         )}
 
-        <main className="flex-1 overflow-y-auto bg-[#0a0a0a] p-4 md:p-8 custom-scrollbar">
+        <main className="flex-1 bg-[#0a0a0a] p-4 md:p-8 custom-scrollbar">
           {children}
         </main>
       </div>
