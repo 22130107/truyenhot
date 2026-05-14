@@ -7,7 +7,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint ."
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.3.0",
@@ -24,6 +24,7 @@
     "@types/react-dom": "^19.2.3",
     "autoprefixer": "^10.5.0",
     "eslint": "^10.3.0",
+    "eslint-config-next": "^16.2.6",
     "eslint-plugin-react-hooks": "^7.1.1",
     "globals": "^17.6.0",
     "postcss": "^8.5.14",
