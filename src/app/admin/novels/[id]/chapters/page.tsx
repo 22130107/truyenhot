@@ -1,40 +1,97 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { ArrowLeft, Plus, Search, Filter, Edit, Trash2, Coins } from "lucide-react";
+import { ArrowLeft, Plus, Search, Filter, Edit, Trash2, Coins, Loader2, Check } from "lucide-react";
 import { useParams } from "next/navigation";
 
 export default function AdminChaptersPage() {
   const params = useParams();
-  const novelId = params.id;
+  const novelId = params.id as string;
   
-  const [chapters, setChapters] = useState([
-    { id: 1, number: 1, title: "Trọng sinh", views: 15420, isPaid: false, price: 0, status: "Published", date: "12/05/2026" },
-    { id: 2, number: 2, title: "Gặp lại cố nhân", views: 12100, isPaid: false, price: 0, status: "Published", date: "12/05/2026" },
-    { id: 3, number: 3, title: "Luyện khí kỳ", views: 11050, isPaid: false, price: 0, status: "Published", date: "13/05/2026" },
-    { id: 4, number: 4, title: "Tiến vào tông môn", views: 9800, isPaid: true, price: 50, status: "Published", date: "14/05/2026" },
-    { id: 5, number: 5, title: "Tàng Kinh Các", views: 8500, isPaid: true, price: 50, status: "Published", date: "15/05/2026" },
-    { id: 6, number: 6, title: "Bí cảnh mở ra", views: 0, isPaid: true, price: 50, status: "Draft", date: "16/05/2026" },
-  ]);
+  const [chapters, setChapters] = useState<any[]>([]);
+  const [novelData, setNovelData] = useState<{title: string, id: string} | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const togglePaidStatus = (chapterId: number) => {
-    setChapters(chapters.map(ch => {
-      if (ch.id === chapterId) {
-        return { ...ch, isPaid: !ch.isPaid, price: !ch.isPaid ? 50 : 0 };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch(`/api/admin/novels/${novelId}/chapters`);
+        const data = await res.json();
+        if (res.ok) {
+          setNovelData(data.novel);
+          setChapters(data.chapters);
+        } else {
+          console.error(data.message);
+        }
+      } catch (err) {
+        console.error("Failed to fetch chapters:", err);
+      } finally {
+        setIsLoading(false);
       }
-      return ch;
-    }));
+    };
+    fetchData();
+  }, [novelId]);
+
+  const togglePaidStatus = async (chapter: any) => {
+    const newIsPaid = !chapter.isPaid;
+    const newPrice = newIsPaid ? 50 : 0;
+    
+    // Optimistic UI update
+    setChapters(chapters.map(ch => ch.id === chapter.id ? { ...ch, isPaid: newIsPaid, price: newPrice } : ch));
+
+    // API Call
+    try {
+      await fetch(`/api/admin/novels/${novelId}/chapters/${chapter.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ isLocked: newIsPaid, price: newPrice })
+      });
+    } catch (err) {
+      console.error("Lỗi khi cập nhật thu phí:", err);
+    }
   };
 
-  const updatePrice = (chapterId: number, newPrice: number) => {
-    setChapters(chapters.map(ch => {
-      if (ch.id === chapterId) {
-        return { ...ch, price: newPrice };
-      }
-      return ch;
-    }));
+  const updatePrice = (chapterId: string, newPrice: number) => {
+    setChapters(chapters.map(ch => ch.id === chapterId ? { ...ch, price: newPrice } : ch));
   };
+
+  const savePriceToDB = async (chapter: any) => {
+    try {
+      const res = await fetch(`/api/admin/novels/${novelId}/chapters/${chapter.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ isLocked: chapter.isPaid, price: chapter.price })
+      });
+      if (res.ok) {
+        alert("Đã lưu giá mới thành công!");
+      }
+    } catch (err) {
+      console.error("Lỗi khi cập nhật giá:", err);
+    }
+  };
+
+  const handleDeleteChapter = async (chapterId: string, chapterTitle: string) => {
+    if (!confirm(`Bạn có chắc chắn muốn xóa chương "${chapterTitle}" không?`)) return;
+    try {
+      const res = await fetch(`/api/admin/novels/${novelId}/chapters/${chapterId}`, { method: 'DELETE' });
+      if (res.ok) {
+        setChapters(chapters.filter(ch => ch.id !== chapterId));
+      } else {
+        alert("Xóa thất bại");
+      }
+    } catch (err) {
+      console.error("Lỗi khi xóa chương:", err);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[50vh]">
+        <Loader2 className="w-8 h-8 text-yellow-400 animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -46,13 +103,18 @@ export default function AdminChaptersPage() {
           </Link>
           <div>
             <h1 className="text-2xl md:text-3xl font-bold text-white tracking-tight">Quản lý Chương</h1>
-            <p className="text-neutral-400 mt-1">Truyện: <span className="text-yellow-400 font-medium">Thần Đạo Đan Tôn (ID: {novelId})</span></p>
+            <p className="text-neutral-400 mt-1">
+              Truyện: <span className="text-yellow-400 font-medium">{novelData?.title || 'Đang tải...'} (ID: {novelId})</span>
+            </p>
           </div>
         </div>
-        <button className="flex items-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-black px-4 py-2.5 rounded-xl font-medium transition-colors">
+        <Link 
+          href={`/admin/novels/${novelId}/chapters/new`}
+          className="flex items-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-black px-4 py-2.5 rounded-xl font-medium transition-colors"
+        >
           <Plus className="w-5 h-5" />
           Thêm chương mới
-        </button>
+        </Link>
       </div>
 
       {/* Filters and Search */}
@@ -101,23 +163,32 @@ export default function AdminChaptersPage() {
                   <td className="p-4">
                     <div className="flex items-center justify-center gap-3">
                       <button 
-                        onClick={() => togglePaidStatus(chapter.id)}
+                        onClick={() => togglePaidStatus(chapter)}
                         className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${chapter.isPaid ? 'bg-yellow-400' : 'bg-neutral-700'}`}
                       >
                         <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${chapter.isPaid ? 'translate-x-6' : 'translate-x-1'}`} />
                       </button>
                       {chapter.isPaid ? (
-                        <div className="flex items-center gap-1 bg-[#0a0a0a] border border-yellow-400/30 px-2 py-1 rounded-md min-w-[80px] focus-within:border-yellow-400 transition-colors">
-                          <Coins className="w-4 h-4 text-yellow-400 flex-shrink-0" />
-                          <input 
-                            type="number" 
-                            value={chapter.price}
-                            onChange={(e) => updatePrice(chapter.id, parseInt(e.target.value) || 0)}
-                            className="w-12 bg-transparent text-yellow-400 font-bold focus:outline-none text-center text-sm"
-                          />
+                        <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-1 bg-[#0a0a0a] border border-yellow-400/30 px-2 py-1 rounded-md min-w-[80px] focus-within:border-yellow-400 transition-colors">
+                            <Coins className="w-4 h-4 text-yellow-400 flex-shrink-0" />
+                            <input 
+                              type="number" 
+                              value={chapter.price}
+                              onChange={(e) => updatePrice(chapter.id, parseInt(e.target.value) || 0)}
+                              className="w-12 bg-transparent text-yellow-400 font-bold focus:outline-none text-center text-sm"
+                            />
+                          </div>
+                          <button 
+                            onClick={() => savePriceToDB(chapter)}
+                            title="Lưu giá"
+                            className="p-1.5 text-emerald-500 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 rounded-md transition-colors"
+                          >
+                            <Check className="w-4 h-4" />
+                          </button>
                         </div>
                       ) : (
-                        <div className="text-neutral-500 text-sm min-w-[80px] text-center">Miễn phí</div>
+                        <div className="text-neutral-500 text-sm min-w-[80px] text-center ml-2">Miễn phí</div>
                       )}
                     </div>
                   </td>
@@ -137,7 +208,10 @@ export default function AdminChaptersPage() {
                       <button className="p-1.5 text-neutral-400 hover:text-yellow-400 bg-neutral-800/50 hover:bg-neutral-800 rounded-lg transition-colors">
                         <Edit className="w-4 h-4" />
                       </button>
-                      <button className="p-1.5 text-neutral-400 hover:text-red-400 bg-neutral-800/50 hover:bg-neutral-800 rounded-lg transition-colors">
+                      <button 
+                        onClick={() => handleDeleteChapter(chapter.id, chapter.title)}
+                        className="p-1.5 text-neutral-400 hover:text-red-400 bg-neutral-800/50 hover:bg-neutral-800 rounded-lg transition-colors"
+                      >
                         <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
@@ -150,13 +224,11 @@ export default function AdminChaptersPage() {
         
         {/* Pagination */}
         <div className="p-4 border-t border-neutral-800 flex justify-between items-center text-sm text-neutral-400">
-          <div>Hiển thị 1 - 6 trong số 1250 chương</div>
+          <div>Tổng cộng: {chapters.length} chương</div>
           <div className="flex gap-2">
             <button className="px-3 py-1.5 rounded-lg border border-neutral-800 hover:bg-neutral-800 transition-colors disabled:opacity-50">Trước</button>
             <button className="px-3 py-1.5 rounded-lg border border-neutral-800 bg-neutral-800 text-white transition-colors">1</button>
-            <button className="px-3 py-1.5 rounded-lg border border-neutral-800 hover:bg-neutral-800 transition-colors">2</button>
-            <button className="px-3 py-1.5 rounded-lg border border-neutral-800 hover:bg-neutral-800 transition-colors">3</button>
-            <button className="px-3 py-1.5 rounded-lg border border-neutral-800 hover:bg-neutral-800 transition-colors">Tiếp</button>
+            <button className="px-3 py-1.5 rounded-lg border border-neutral-800 hover:bg-neutral-800 transition-colors disabled:opacity-50">Tiếp</button>
           </div>
         </div>
       </div>

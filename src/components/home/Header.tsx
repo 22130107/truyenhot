@@ -20,8 +20,21 @@ export function Header() {
   const [isGenresOpen, setIsGenresOpen] = React.useState(false);
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
 
+  const [user, setUser] = React.useState<any>(null);
+
   React.useEffect(() => {
-    setIsLoggedIn(localStorage.getItem('isLoggedIn') === 'true');
+    const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    setIsLoggedIn(loggedIn);
+    
+    if (loggedIn) {
+      const userData = localStorage.getItem('user');
+      if (userData) {
+        try {
+          setUser(JSON.parse(userData));
+        } catch (e) {}
+      }
+    }
+
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
@@ -31,8 +44,10 @@ export function Header() {
 
   const handleLogout = () => {
     localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('user');
     setIsLoggedIn(false);
-    window.location.reload();
+    setUser(null);
+    window.location.href = '/';
   };
 
   return (
@@ -127,8 +142,8 @@ export function Header() {
                     <div className="bg-[rgb(42,51,34)] border border-neutral-800 rounded-lg shadow-2xl w-64 overflow-hidden">
                       {/* User Info Section */}
                       <div className="p-4 border-b border-neutral-800">
-                        <div className="font-bold text-white text-lg">Trịnh Huỳnh</div>
-                        <div className="text-gray-500 text-xs truncate">huynh080104@gmail.com</div>
+                        <div className="font-bold text-white text-lg">{user ? user.username : 'Người dùng'}</div>
+                        <div className="text-gray-500 text-xs truncate">{user ? user.email : ''}</div>
                       </div>
                       
                       {/* Menu Links */}
@@ -205,10 +220,10 @@ export function Header() {
             </div>
             
             <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-[rgb(31,38,25)]">
-              {isLoggedIn && (
+              {isLoggedIn && user && (
                 <div className="p-4 bg-white/5 rounded-xl border border-white/10 mb-2">
-                  <div className="font-bold text-white">Trịnh Huỳnh</div>
-                  <div className="text-gray-500 text-xs truncate">huynh080104@gmail.com</div>
+                  <div className="font-bold text-white">{user.username}</div>
+                  <div className="text-gray-500 text-xs truncate">{user.email}</div>
                 </div>
               )}
 

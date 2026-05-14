@@ -1,10 +1,16 @@
 "use client";
 
-import { Save, ArrowLeft, Image as ImageIcon, UploadCloud } from "lucide-react";
+import { Save, ArrowLeft, Image as ImageIcon, UploadCloud, Loader2 } from "lucide-react";
 import Link from "next/link";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
 
-export default function AdminAddNovelPage() {
+export default function AdminEditNovelPage() {
+  const params = useParams();
+  const router = useRouter();
+  const novelId = params.id as string;
+
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const categories = ["Tiên hiệp", "Kiếm hiệp", "Huyền huyễn", "Đô thị", "Ngôn tình", "Xuyên không", "Dị giới", "Võng du", "Khoa huyễn", "Lịch sử"];
 
@@ -23,6 +29,38 @@ export default function AdminAddNovelPage() {
   const [posterUrl, setPosterUrl] = useState("");
   const [uploadingPoster, setUploadingPoster] = useState(false);
   const posterInputRef = useRef<HTMLInputElement>(null);
+
+  const [title, setTitle] = useState("");
+  const [author, setAuthor] = useState("");
+  const [status, setStatus] = useState("ONGOING");
+  const [description, setDescription] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
+
+  useEffect(() => {
+    const fetchNovel = async () => {
+      try {
+        const res = await fetch(`/api/admin/novels/${novelId}`);
+        const data = await res.json();
+        if (res.ok) {
+          setTitle(data.title || "");
+          setAuthor(data.author || "");
+          setStatus(data.status || "ONGOING");
+          setDescription(data.description || "");
+          setCoverUrl(data.coverUrl || "");
+          setPosterUrl(data.posterUrl || "");
+          setSelectedCategories(data.categories || []);
+        } else {
+          alert(data.message || "Không thể tải dữ liệu truyện");
+          router.push('/admin/novels');
+        }
+      } catch (error) {
+        console.error("Lỗi khi tải truyện:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchNovel();
+  }, [novelId, router]);
 
   const handleFileUpload = async (file: File, setUrl: (url: string) => void, setUploading: (state: boolean) => void) => {
     setUploading(true);
@@ -70,12 +108,6 @@ export default function AdminAddNovelPage() {
     if (file) handleFileUpload(file, setPosterUrl, setUploadingPoster);
   };
 
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [status, setStatus] = useState("ONGOING");
-  const [description, setDescription] = useState("");
-  const [isSaving, setIsSaving] = useState(false);
-
   const handleSaveNovel = async () => {
     if (!title || !author) {
       alert("Vui lòng nhập Tên truyện và Tác giả!");
@@ -84,8 +116,8 @@ export default function AdminAddNovelPage() {
 
     setIsSaving(true);
     try {
-      const res = await fetch('/api/admin/novels', {
-        method: 'POST',
+      const res = await fetch(`/api/admin/novels/${novelId}`, {
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           title,
@@ -100,10 +132,10 @@ export default function AdminAddNovelPage() {
 
       const data = await res.json();
       if (res.ok) {
-        alert("Thêm truyện thành công!");
-        window.location.href = "/admin/novels";
+        alert("Cập nhật truyện thành công!");
+        router.push("/admin/novels");
       } else {
-        alert(data.message || "Có lỗi xảy ra khi thêm truyện.");
+        alert(data.message || "Có lỗi xảy ra khi cập nhật truyện.");
       }
     } catch (error) {
       console.error("Save error:", error);
@@ -113,6 +145,14 @@ export default function AdminAddNovelPage() {
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[50vh]">
+        <Loader2 className="w-8 h-8 text-yellow-400 animate-spin" />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
       {/* Page Header */}
@@ -121,8 +161,8 @@ export default function AdminAddNovelPage() {
           <ArrowLeft className="w-6 h-6" />
         </Link>
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-white tracking-tight">Thêm truyện mới</h1>
-          <p className="text-neutral-400 mt-1">Nhập thông tin chi tiết để thêm một bộ truyện mới vào hệ thống.</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-white tracking-tight">Sửa thông tin truyện</h1>
+          <p className="text-neutral-400 mt-1">Cập nhật nội dung cho truyện {title || 'đang chọn'}.</p>
         </div>
       </div>
 
@@ -338,7 +378,7 @@ export default function AdminAddNovelPage() {
               className="flex items-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-black px-6 py-3 rounded-xl font-medium transition-colors disabled:opacity-50"
             >
               <Save className="w-5 h-5" />
-              {isSaving ? "Đang lưu..." : "Lưu truyện"}
+              {isSaving ? "Đang lưu..." : "Cập nhật truyện"}
             </button>
           </div>
         </div>

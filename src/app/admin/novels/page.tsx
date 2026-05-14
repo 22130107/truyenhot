@@ -1,16 +1,59 @@
 "use client";
 
-import { Plus, Search, Filter, Edit, Trash2, MoreVertical, Eye, List } from "lucide-react";
+import { Plus, Search, Filter, Edit, Trash2, List } from "lucide-react";
 import Link from "next/link";
+import { useState, useEffect } from "react";
 
 export default function AdminNovelsPage() {
-  const novels = [
-    { id: 1, name: "Thần Đạo Đan Tôn", author: "Cô Đơn Địa Phi", chapters: 1250, views: "2.4M", status: "Đang ra", price: "Miễn phí" },
-    { id: 2, name: "Kiếm Đạo Độc Tôn", author: "Kiếm Du Thái Hư", chapters: 3215, views: "1.8M", status: "Hoàn thành", price: "Trả phí" },
-    { id: 3, name: "Phàm Nhân Tu Tiên", author: "Vong Ngữ", chapters: 2446, views: "5.1M", status: "Hoàn thành", price: "Miễn phí" },
-    { id: 4, name: "Đấu Phá Thương Khung", author: "Thiên Tàm Thổ Đậu", chapters: 1641, views: "4.2M", status: "Hoàn thành", price: "Trả phí" },
-    { id: 5, name: "Vũ Động Càn Khôn", author: "Thiên Tàm Thổ Đậu", chapters: 1309, views: "3.1M", status: "Đang ra", price: "Miễn phí" },
-  ];
+  const [novels, setNovels] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    const fetchNovels = async () => {
+      try {
+        const res = await fetch('/api/admin/novels');
+        const data = await res.json();
+        if (res.ok) {
+          setNovels(data);
+        }
+      } catch (error) {
+        console.error('Lỗi khi tải danh sách truyện:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchNovels();
+  }, []);
+
+  const handleDeleteNovel = async (id: string, title: string) => {
+    if (!confirm(`Bạn có chắc chắn muốn xóa truyện "${title}" không? Hành động này không thể hoàn tác và sẽ xóa toàn bộ chương của truyện.`)) {
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/admin/novels/${id}`, {
+        method: 'DELETE',
+      });
+      const data = await res.json();
+      
+      if (res.ok) {
+        alert("Xóa truyện thành công!");
+        setNovels(novels.filter(n => n.id !== id));
+      } else {
+        alert(data.message || "Xóa truyện thất bại.");
+      }
+    } catch (error) {
+      console.error("Lỗi khi xóa truyện:", error);
+      alert("Đã xảy ra lỗi hệ thống.");
+    }
+  };
+
+  const filteredNovels = novels.filter((novel) => {
+    return (novel.title?.toLowerCase() || "").includes(searchTerm.toLowerCase()) ||
+           (novel.author?.toLowerCase() || "").includes(searchTerm.toLowerCase());
+  });
 
   return (
     <div className="space-y-6">
@@ -33,6 +76,8 @@ export default function AdminNovelsPage() {
           <input 
             type="text" 
             placeholder="Tìm kiếm tên truyện, tác giả..." 
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full bg-[#111] border border-neutral-800 text-white rounded-xl pl-10 pr-4 py-2.5 focus:outline-none focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400/50 transition-all"
           />
         </div>
@@ -45,76 +90,98 @@ export default function AdminNovelsPage() {
       {/* Novels Table */}
       <div className="bg-[#111] border border-neutral-800 rounded-2xl overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="bg-neutral-900/50">
-                <th className="p-4 text-neutral-400 font-medium text-sm">Tên truyện</th>
-                <th className="p-4 text-neutral-400 font-medium text-sm">Tác giả</th>
-                <th className="p-4 text-neutral-400 font-medium text-sm">Số chương</th>
-                <th className="p-4 text-neutral-400 font-medium text-sm">Lượt xem</th>
-                <th className="p-4 text-neutral-400 font-medium text-sm">Trạng thái</th>
-                <th className="p-4 text-neutral-400 font-medium text-sm">Loại</th>
-                <th className="p-4 text-neutral-400 font-medium text-sm text-center">Hành động</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-neutral-800">
-              {novels.map((novel) => (
-                <tr key={novel.id} className="hover:bg-neutral-900/50 transition-colors">
-                  <td className="p-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-14 bg-neutral-800 rounded-md flex-shrink-0"></div>
-                      <span className="text-white font-medium line-clamp-2">{novel.name}</span>
-                    </div>
-                  </td>
-                  <td className="p-4 text-neutral-400">{novel.author}</td>
-                  <td className="p-4 text-neutral-300">{novel.chapters}</td>
-                  <td className="p-4 text-neutral-300">{novel.views}</td>
-                  <td className="p-4">
-                    <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${
-                      novel.status === 'Đang ra' 
-                        ? 'bg-blue-500/10 text-blue-500' 
-                        : 'bg-emerald-500/10 text-emerald-500'
-                    }`}>
-                      {novel.status}
-                    </span>
-                  </td>
-                  <td className="p-4">
-                    <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${
-                      novel.price === 'Trả phí' 
-                        ? 'bg-yellow-500/10 text-yellow-500' 
-                        : 'bg-neutral-800 text-neutral-400'
-                    }`}>
-                      {novel.price}
-                    </span>
-                  </td>
-                  <td className="p-4 text-center">
-                    <div className="flex justify-center items-center gap-2">
-                      <Link href={`/admin/novels/${novel.id}/chapters`} className="p-1.5 text-neutral-400 hover:text-blue-400 bg-neutral-800/50 hover:bg-neutral-800 rounded-lg transition-colors" title="Quản lý chương">
-                        <List className="w-4 h-4" />
-                      </Link>
-                      <button className="p-1.5 text-neutral-400 hover:text-yellow-400 bg-neutral-800/50 hover:bg-neutral-800 rounded-lg transition-colors">
-                        <Edit className="w-4 h-4" />
-                      </button>
-                      <button className="p-1.5 text-neutral-400 hover:text-red-400 bg-neutral-800/50 hover:bg-neutral-800 rounded-lg transition-colors">
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </td>
+          {loading ? (
+            <div className="p-8 flex justify-center items-center text-neutral-400">
+              Đang tải dữ liệu...
+            </div>
+          ) : (
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-neutral-900/50">
+                  <th className="p-4 text-neutral-400 font-medium text-sm">Tên truyện</th>
+                  <th className="p-4 text-neutral-400 font-medium text-sm">Tác giả</th>
+                  <th className="p-4 text-neutral-400 font-medium text-sm">Số chương</th>
+                  <th className="p-4 text-neutral-400 font-medium text-sm">Lượt xem</th>
+                  <th className="p-4 text-neutral-400 font-medium text-sm">Trạng thái</th>
+                  <th className="p-4 text-neutral-400 font-medium text-sm">Loại</th>
+                  <th className="p-4 text-neutral-400 font-medium text-sm text-center">Hành động</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-neutral-800">
+                {filteredNovels.length === 0 ? (
+                  <tr>
+                    <td colSpan={7} className="p-8 text-center text-neutral-500">
+                      Không tìm thấy truyện nào.
+                    </td>
+                  </tr>
+                ) : (
+                  filteredNovels.map((novel) => (
+                    <tr key={novel.id} className="hover:bg-neutral-900/50 transition-colors">
+                      <td className="p-4">
+                        <div className="flex items-center gap-3">
+                          {novel.coverUrl ? (
+                            <img src={novel.coverUrl} alt={novel.title} className="w-10 h-14 object-cover rounded-md flex-shrink-0" />
+                          ) : (
+                            <div className="w-10 h-14 bg-neutral-800 rounded-md flex-shrink-0 flex items-center justify-center text-xs text-gray-500">No Img</div>
+                          )}
+                          <span className="text-white font-medium line-clamp-2">{novel.title}</span>
+                        </div>
+                      </td>
+                      <td className="p-4 text-neutral-400">{novel.author}</td>
+                      <td className="p-4 text-neutral-300">{novel.chapterCount || 0}</td>
+                      <td className="p-4 text-neutral-300">{novel.views?.toLocaleString() || 0}</td>
+                      <td className="p-4">
+                        <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${
+                          novel.status === 'ONGOING' 
+                            ? 'bg-blue-500/10 text-blue-500' 
+                            : novel.status === 'COMPLETED'
+                            ? 'bg-emerald-500/10 text-emerald-500'
+                            : 'bg-neutral-500/10 text-neutral-500'
+                        }`}>
+                          {novel.status === 'ONGOING' ? 'Đang ra' : novel.status === 'COMPLETED' ? 'Hoàn thành' : 'Tạm ngưng'}
+                        </span>
+                      </td>
+                      <td className="p-4">
+                        <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${
+                          novel.maxPrice > 0 
+                            ? 'bg-yellow-500/10 text-yellow-500' 
+                            : 'bg-neutral-800 text-neutral-400'
+                        }`}>
+                          {novel.maxPrice > 0 ? 'Trả phí' : 'Miễn phí'}
+                        </span>
+                      </td>
+                      <td className="p-4 text-center">
+                        <div className="flex justify-center items-center gap-2">
+                          <Link href={`/admin/novels/${novel.id}/chapters`} className="p-1.5 text-neutral-400 hover:text-blue-400 bg-neutral-800/50 hover:bg-neutral-800 rounded-lg transition-colors" title="Quản lý chương">
+                            <List className="w-4 h-4" />
+                          </Link>
+                          <Link href={`/admin/novels/${novel.id}/edit`} className="p-1.5 text-neutral-400 hover:text-yellow-400 bg-neutral-800/50 hover:bg-neutral-800 rounded-lg transition-colors" title="Sửa truyện">
+                            <Edit className="w-4 h-4" />
+                          </Link>
+                          <button 
+                            onClick={() => handleDeleteNovel(novel.id, novel.title)}
+                            className="p-1.5 text-neutral-400 hover:text-red-400 bg-neutral-800/50 hover:bg-neutral-800 rounded-lg transition-colors" 
+                            title="Xóa truyện"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          )}
         </div>
         
         {/* Pagination */}
         <div className="p-4 border-t border-neutral-800 flex justify-between items-center text-sm text-neutral-400">
-          <div>Hiển thị 1 - 5 trong số 120 truyện</div>
+          <div>Hiển thị {filteredNovels.length} truyện</div>
           <div className="flex gap-2">
             <button className="px-3 py-1.5 rounded-lg border border-neutral-800 hover:bg-neutral-800 transition-colors disabled:opacity-50">Trước</button>
             <button className="px-3 py-1.5 rounded-lg border border-neutral-800 bg-neutral-800 text-white transition-colors">1</button>
-            <button className="px-3 py-1.5 rounded-lg border border-neutral-800 hover:bg-neutral-800 transition-colors">2</button>
-            <button className="px-3 py-1.5 rounded-lg border border-neutral-800 hover:bg-neutral-800 transition-colors">3</button>
-            <button className="px-3 py-1.5 rounded-lg border border-neutral-800 hover:bg-neutral-800 transition-colors">Tiếp</button>
+            <button className="px-3 py-1.5 rounded-lg border border-neutral-800 hover:bg-neutral-800 transition-colors disabled:opacity-50">Tiếp</button>
           </div>
         </div>
       </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard,
   BookOpen,
@@ -11,7 +11,7 @@ import {
   LogOut,
   Menu,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function AdminLayout({
   children,
@@ -19,7 +19,43 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isAuthorized, setIsAuthorized] = useState(false);
+
+  useEffect(() => {
+    const checkAuth = () => {
+      const userData = localStorage.getItem("user");
+      if (!userData) {
+        router.push("/login");
+        return;
+      }
+
+      try {
+        const user = JSON.parse(userData);
+        if (user.role !== "ADMIN") {
+          router.push("/"); // Redirect normal users
+        } else {
+          setIsAuthorized(true);
+        }
+      } catch (error) {
+        console.error("Lỗi khi kiểm tra quyền truy cập", error);
+        router.push("/login");
+      }
+    };
+    checkAuth();
+  }, [router]);
+
+  if (!isAuthorized) {
+    return (
+      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center text-white">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-8 h-8 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-gray-400">Đang kiểm tra quyền truy cập...</p>
+        </div>
+      </div>
+    );
+  }
 
   const navigation = [
     { name: "Quản lý Truyện", href: "/admin/novels", icon: BookOpen },
