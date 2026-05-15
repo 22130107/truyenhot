@@ -62,6 +62,10 @@ export const metadata: Metadata = {
       "Đọc truyện online miễn phí tại Truyện Hot. Kho truyện phong phú: tiên hiệp, kiếm hiệp, ngôn tình, đô thị, huyền huyễn.",
     images: ["/logo.png"],
   },
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png",
+  },
   alternates: {
     canonical: SITE_URL,
   },
