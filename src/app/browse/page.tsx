@@ -26,20 +26,11 @@ export const metadata: Metadata = {
       "Tìm kiếm và khám phá hàng nghìn bộ truyện online tại Truyện Hot.",
     siteName: "Truyện Hot",
     locale: "vi_VN",
-    images: [
-      {
-        url: `${SITE_URL}/logo.png`,
-        width: 1200,
-        height: 630,
-        alt: "Tìm kiếm truyện - Truyện Hot",
-      },
-    ],
   },
   twitter: {
-    card: "summary_large_image",
+    card: "summary",
     title: "Tìm Kiếm Truyện - Truyện Hot",
     description: "Tìm kiếm và khám phá hàng nghìn bộ truyện online tại Truyện Hot.",
-    images: [`${SITE_URL}/logo.png`],
   },
 };
 

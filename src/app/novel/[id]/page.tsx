@@ -87,20 +87,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description,
       siteName: "Truyện Hot",
       locale: "vi_VN",
-      images: [
-        {
-          url: imageUrl,
-          width: 400,
-          height: 600,
-          alt: `Ảnh bìa truyện ${novel.title}`,
-        },
-      ],
     },
     twitter: {
-      card: "summary_large_image",
+      card: "summary",
       title,
       description,
-      images: [imageUrl],
     },
   };
 }

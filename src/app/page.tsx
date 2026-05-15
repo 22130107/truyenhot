@@ -18,21 +18,12 @@ export const metadata: Metadata = {
       "Đọc truyện online miễn phí tại Truyện Hot. Kho truyện phong phú: tiên hiệp, kiếm hiệp, ngôn tình, đô thị, huyền huyễn.",
     siteName: "Truyện Hot",
     locale: "vi_VN",
-    images: [
-      {
-        url: `${SITE_URL}/logo.png`,
-        width: 1200,
-        height: 630,
-        alt: "Truyện Hot - Đọc Truyện Online",
-      },
-    ],
   },
   twitter: {
-    card: "summary_large_image",
+    card: "summary",
     title: "Truyện Hot - Đọc Truyện Online Miễn Phí",
     description:
       "Đọc truyện online miễn phí tại Truyện Hot. Kho truyện phong phú: tiên hiệp, kiếm hiệp, ngôn tình, đô thị, huyền huyễn.",
-    images: [`${SITE_URL}/logo.png`],
   },
 };
 
