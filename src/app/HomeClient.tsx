@@ -38,7 +38,7 @@ function useNovels(type: string, limit = 5) {
 
 function CardSkeleton() {
   return (
-    <div className="w-[339.4px] shrink-0 mr-[20px]">
+    <div className="w-[45vw] md:w-[339.4px] shrink-0 mr-[12px] md:mr-[20px]">
       <div className="bg-neutral-800 animate-pulse rounded-2xl aspect-[3/4] w-full" />
       <div className="mt-2 space-y-1.5 p-2">
         <div className="bg-neutral-800 animate-pulse h-4 rounded w-3/4" />
@@ -72,7 +72,7 @@ export default function HomeClient() {
                 {l1
                   ? Array.from({ length: 5 }).map((_, i) => <CardSkeleton key={i} />)
                   : bookmarked.map((novel) => (
-                      <div key={novel.id} className="h-full relative w-[339.4px] mr-[20px] shrink-0">
+                      <div key={novel.id} className="h-full relative w-[45vw] md:w-[339.4px] mr-[12px] md:mr-[20px] shrink-0">
                         <StoryCard
                           href={`/novel/${novel.id}`}
                           imageUrl={novel.coverUrl}
@@ -99,7 +99,7 @@ export default function HomeClient() {
                 {l2
                   ? Array.from({ length: 5 }).map((_, i) => <CardSkeleton key={i} />)
                   : topViewed.map((novel, index) => (
-                      <div key={novel.id} className="h-full relative w-[339.4px] mr-[20px] shrink-0">
+                      <div key={novel.id} className="h-full relative w-[45vw] md:w-[339.4px] mr-[12px] md:mr-[20px] shrink-0">
                         <RankedStoryCard
                           href={`/novel/${novel.id}`}
                           imageUrl={novel.coverUrl}
