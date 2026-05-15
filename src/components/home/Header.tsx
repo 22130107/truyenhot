@@ -244,13 +244,6 @@ export function Header() {
             </div>
             
             <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-[rgb(31,38,25)]">
-              {isLoggedIn && user && (
-                <div className="p-4 bg-white/5 rounded-xl border border-white/10 mb-2">
-                  <div className="font-bold text-white">{user.username}</div>
-                  <div className="text-gray-500 text-xs truncate">{user.email}</div>
-                </div>
-              )}
-
               <div className="space-y-3">
                 <h3 className="text-gray-500 uppercase text-xs font-bold tracking-widest">Menu</h3>
                 <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="block text-lg font-medium text-gray-200 py-2">Trang chủ</Link>
@@ -262,9 +255,7 @@ export function Header() {
                   </>
                 )}
                 <Link href="/guide" onClick={() => setIsMobileMenuOpen(false)} className="block text-lg font-medium text-gray-200 py-2">Hướng dẫn nạp</Link>
-                {isLoggedIn ? (
-                  <button onClick={handleLogout} className="block text-lg font-bold text-red-500 py-2 text-left">Đăng xuất</button>
-                ) : (
+                {!isLoggedIn && (
                   <Link href="/login" onClick={() => setIsMobileMenuOpen(false)} className="block text-lg font-bold text-[rgb(250,204,21)] py-2">Đăng nhập / Đăng ký</Link>
                 )}
               </div>
