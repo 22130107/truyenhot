@@ -88,7 +88,7 @@ export function HeroSection() {
           </div>
 
           {/* Content */}
-          <div className="items-end flex h-full justify-start relative pt-20 px-4 md:px-16 pb-12 md:pb-8 z-10">
+          <div className="items-end flex h-full justify-start relative pt-20 px-4 md:px-16 pb-12 md:pb-8 z-30">
             <div className="text-left text-white max-w-sm transition-all duration-500">
 
               {/* Status badge */}
@@ -152,7 +152,7 @@ export function HeroSection() {
 
           {/* Bottom fade */}
           <div
-            className="absolute h-[150px] md:h-[200px] left-0 right-0 bottom-0 z-[3]"
+            className="pointer-events-none absolute h-[150px] md:h-[200px] left-0 right-0 bottom-0 z-[3]"
             style={{ backgroundImage: "linear-gradient(0deg, rgb(31,38,25), rgba(31,38,25,0))" }}
           />
         </section>
