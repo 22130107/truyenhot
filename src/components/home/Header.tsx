@@ -100,7 +100,17 @@ export function Header() {
               </div>
 
               <Link href="/guide" className="items-center flex text-white pt-2 pr-4 pb-2 pl-4 rounded-md hover:bg-white/10 transition-colors font-medium">Hướng dẫn nạp</Link>
-              <span className="items-center flex text-white pt-2 pr-4 pb-2 pl-4 rounded-md opacity-60 cursor-default font-medium">Fanpage</span>
+              <a
+                href="https://www.facebook.com/truyenhotonline.vn/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="items-center flex text-white pt-2 pr-4 pb-2 pl-4 rounded-md hover:bg-white/10 transition-colors font-medium gap-2"
+              >
+                <svg className="w-4 h-4 fill-current text-[#1877F2]" viewBox="0 0 24 24">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+                Fanpage
+              </a>
             </div>
 
             <div className="items-center flex gap-2">
@@ -291,10 +301,17 @@ export function Header() {
             </div>
             
             <div className="p-6 border-t border-neutral-800 bg-[rgb(31,38,25)]">
-              <div className="flex items-center gap-3 text-gray-500 font-medium p-2 cursor-default">
-                <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                Fanpage (Sắp ra mắt)
-              </div>
+              <a
+                href="https://www.facebook.com/truyenhotonline.vn/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 text-gray-300 hover:text-[#1877F2] font-medium p-2 transition-colors rounded-md hover:bg-white/5"
+              >
+                <svg className="w-5 h-5 fill-current text-[#1877F2]" viewBox="0 0 24 24">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+                Fanpage
+              </a>
             </div>
           </div>
         </div>

@@ -2,9 +2,71 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "./providers";
 
+const SITE_URL = "https://truyenhot.online";
+const SITE_NAME = "Truyện Hot";
+
 export const metadata: Metadata = {
-  title: "Truyện Hot",
-  description: "Web đọc truyện hot",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "Truyện Hot - Đọc Truyện Online Miễn Phí",
+    template: "%s | Truyện Hot",
+  },
+  description:
+    "Đọc truyện online miễn phí tại Truyện Hot. Kho truyện phong phú: tiên hiệp, kiếm hiệp, ngôn tình, đô thị, huyền huyễn. Cập nhật nhanh, đọc mượt mà trên mọi thiết bị.",
+  keywords: [
+    "đọc truyện online",
+    "truyện hot",
+    "truyện tiên hiệp",
+    "truyện kiếm hiệp",
+    "truyện ngôn tình",
+    "truyện đô thị",
+    "truyện huyền huyễn",
+    "đọc truyện miễn phí",
+    "truyenhot",
+  ],
+  authors: [{ name: "Truyện Hot", url: SITE_URL }],
+  creator: "Truyện Hot",
+  publisher: "Truyện Hot",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  openGraph: {
+    type: "website",
+    locale: "vi_VN",
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    title: "Truyện Hot - Đọc Truyện Online Miễn Phí",
+    description:
+      "Đọc truyện online miễn phí tại Truyện Hot. Kho truyện phong phú: tiên hiệp, kiếm hiệp, ngôn tình, đô thị, huyền huyễn.",
+    images: [
+      {
+        url: "/logo.png",
+        width: 1200,
+        height: 630,
+        alt: "Truyện Hot - Đọc Truyện Online",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Truyện Hot - Đọc Truyện Online Miễn Phí",
+    description:
+      "Đọc truyện online miễn phí tại Truyện Hot. Kho truyện phong phú: tiên hiệp, kiếm hiệp, ngôn tình, đô thị, huyền huyễn.",
+    images: ["/logo.png"],
+  },
+  alternates: {
+    canonical: SITE_URL,
+  },
+  // Thêm verification khi có Google Search Console:
+  // verification: { google: "your-verification-code" },
 };
 
 export default function RootLayout({
