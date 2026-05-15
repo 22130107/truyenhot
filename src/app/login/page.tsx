@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { signIn } from "next-auth/react";
 
 import { Logo } from '@/components/home/Logo';
@@ -9,6 +10,7 @@ export default function LoginPage() {
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [remember, setRemember] = useState(false);
+  const router = useRouter();
 
   const handleSocialLogin = (provider: "google" | "facebook") => {
     signIn(provider, { callbackUrl: "/" });
@@ -32,10 +34,18 @@ export default function LoginPage() {
         } else {
           localStorage.removeItem('rememberedUser');
         }
-        
+
+        // Xóa user cũ trước, ghi user mới
+        localStorage.removeItem('user');
         localStorage.setItem('isLoggedIn', 'true');
         localStorage.setItem('user', JSON.stringify(data.user));
-        window.location.href = '/';
+
+        // Dispatch storage event để các component khác cập nhật ngay
+        window.dispatchEvent(new Event('storage'));
+
+        // Dùng replace + refresh để xóa cache Next.js router
+        router.replace('/');
+        router.refresh();
       } else {
         alert(`Lỗi: ${data.message}`);
       }

@@ -9,14 +9,24 @@ export default function ProfilePage() {
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
-    const userData = localStorage.getItem('user');
-    if (userData) {
-      try {
-        setUser(JSON.parse(userData));
-      } catch (e) {
-        console.error('Lỗi phân tích thông tin người dùng', e);
+    const loadUser = () => {
+      const userData = localStorage.getItem('user');
+      if (userData) {
+        try {
+          setUser(JSON.parse(userData));
+        } catch (e) {
+          console.error('Lỗi phân tích thông tin người dùng', e);
+        }
+      } else {
+        setUser(null);
       }
-    }
+    };
+
+    loadUser();
+
+    // Cập nhật khi localStorage thay đổi (đăng nhập tài khoản khác ở tab khác)
+    window.addEventListener('storage', loadUser);
+    return () => window.removeEventListener('storage', loadUser);
   }, []);
 
   return (
