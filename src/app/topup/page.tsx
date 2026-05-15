@@ -4,12 +4,25 @@ import Image from "next/image";
 import { Header } from "@/components/home/Header";
 import { Footer } from "@/components/home/Footer";
 
-const TOPUP_PACKAGES = [
-  { id: 1, name: "Gói nhỏ",      coins: 20,  price: "20,000đ",  priceNum: 20000,  bonus: 0,  popular: false },
-  { id: 2, name: "Gói vừa",      coins: 55,  price: "50,000đ",  priceNum: 50000,  bonus: 5,  popular: true  },
-  { id: 3, name: "Gói lớn",      coins: 112, price: "100,000đ", priceNum: 100000, bonus: 12, popular: false },
-  { id: 4, name: "Gói siêu lớn", coins: 230, price: "200,000đ", priceNum: 200000, bonus: 30, popular: false },
+const BASE_PACKAGES = [
+  { id: 1, name: "Gói nhỏ",      priceNum: 20000,  popular: false },
+  { id: 2, name: "Gói vừa",      priceNum: 50000,  popular: true  },
+  { id: 3, name: "Gói lớn",      priceNum: 100000, popular: false },
+  { id: 4, name: "Gói siêu lớn", priceNum: 200000, popular: false },
 ];
+
+function calcPackages(exchangeRate: number, bonusPercent: number) {
+  return BASE_PACKAGES.map((pkg) => {
+    const baseCoins  = Math.floor(pkg.priceNum / exchangeRate);
+    const bonusCoins = Math.floor(baseCoins * bonusPercent / 100);
+    return {
+      ...pkg,
+      coins: baseCoins + bonusCoins,
+      bonus: bonusCoins,
+      price: pkg.priceNum.toLocaleString("vi-VN") + "đ",
+    };
+  });
+}
 
 type PaymentStatus = "idle" | "loading" | "pending" | "completed" | "failed" | "cancelled";
 
@@ -25,14 +38,19 @@ interface PaymentInfo {
   expiredAt: string;
 }
 
+type TopupPackage = ReturnType<typeof calcPackages>[0];
+
 export default function TopupPage() {
   // Lấy userId từ localStorage (được lưu khi đăng nhập)
   const [userId, setUserId] = useState<string | null>(null);
   const [userCoins, setUserCoins] = useState<number>(0);
 
+  // Packages tính theo settings DB
+  const [packages, setPackages] = useState<TopupPackage[]>(() => calcPackages(1000, 0));
+
   const [status, setStatus] = useState<PaymentStatus>("idle");
   const [paymentInfo, setPaymentInfo] = useState<PaymentInfo | null>(null);
-  const [selectedPkg, setSelectedPkg] = useState<(typeof TOPUP_PACKAGES)[0] | null>(null);
+  const [selectedPkg, setSelectedPkg] = useState<TopupPackage | null>(null);
   const [timeLeft, setTimeLeft] = useState<number>(0); // giây còn lại
   const [errorMsg, setErrorMsg] = useState<string>("");
 
@@ -51,6 +69,18 @@ export default function TopupPage() {
     } catch {
       // ignore
     }
+  }, []);
+
+  // Fetch settings từ DB để tính giá đúng
+  useEffect(() => {
+    fetch("/api/admin/settings")
+      .then((r) => r.json())
+      .then((data) => {
+        const rate   = parseInt(data.exchange_rate ?? "1000", 10) || 1000;
+        const bonus  = parseInt(data.bonus_percent ?? "0",    10) || 0;
+        setPackages(calcPackages(rate, bonus));
+      })
+      .catch(() => { /* fallback về mặc định */ });
   }, []);
 
   // Dọn dẹp interval khi unmount
@@ -113,7 +143,7 @@ export default function TopupPage() {
     countdownRef.current = setInterval(update, 1000);
   }, []);
 
-  const handleSelectPackage = async (pkg: (typeof TOPUP_PACKAGES)[0]) => {
+  const handleSelectPackage = async (pkg: TopupPackage) => {
     if (!userId) {
       setErrorMsg("Bạn cần đăng nhập để nạp xu.");
       return;
@@ -340,7 +370,7 @@ export default function TopupPage() {
 
         {/* Pricing Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          {TOPUP_PACKAGES.map((pkg) => (
+          {packages.map((pkg) => (
             <div
               key={pkg.id}
               className={`relative bg-[rgb(31,41,55)] border rounded-2xl p-6 transition-all hover:translate-y-[-4px] shadow-xl ${
