@@ -3,13 +3,20 @@ import pool from "@/lib/db";
 import { RowDataPacket } from "mysql2";
 import { randomUUID } from "crypto";
 
-// GET — lấy thông tin mua toàn bộ (tổng xu cần, số chương chưa mua)
+// GET — lấy thông tin mua toàn bộ
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id: novelId } = await params;
   const userId = req.nextUrl.searchParams.get("userId");
+
+  // Lấy comboPrice của novel
+  const [novels] = await pool.query<RowDataPacket[]>(
+    `SELECT comboPrice FROM novel WHERE id = ? LIMIT 1`,
+    [novelId]
+  );
+  const comboPrice: number | null = novels[0]?.comboPrice ?? null;
 
   // Lấy tất cả chương trả phí
   const [lockedChapters] = await pool.query<RowDataPacket[]>(
@@ -18,12 +25,11 @@ export async function GET(
   );
 
   if (lockedChapters.length === 0) {
-    return NextResponse.json({ totalPrice: 0, unpurchasedCount: 0, discount: 0 });
+    return NextResponse.json({ totalPrice: 0, unpurchasedCount: 0, discount: 0, hasComboPrice: false });
   }
 
   let unpurchasedChapters = lockedChapters;
 
-  // Nếu có userId, loại bỏ các chương đã mua
   if (userId) {
     const chapterIds = lockedChapters.map((c) => c.id);
     const [purchased] = await pool.query<RowDataPacket[]>(
@@ -35,15 +41,28 @@ export async function GET(
   }
 
   const totalRetail = unpurchasedChapters.reduce((sum, c) => sum + c.price, 0);
-  // Giảm 30% khi mua toàn bộ
-  const discount = 30;
-  const totalPrice = Math.ceil(totalRetail * (1 - discount / 100));
+
+  let totalPrice: number;
+  let discount: number;
+  let hasComboPrice = false;
+
+  if (comboPrice !== null && comboPrice > 0) {
+    // Dùng giá combo cố định
+    totalPrice = comboPrice;
+    discount = totalRetail > 0 ? Math.round((1 - comboPrice / totalRetail) * 100) : 0;
+    hasComboPrice = true;
+  } else {
+    // Giảm 30% mặc định
+    discount = 30;
+    totalPrice = Math.ceil(totalRetail * (1 - discount / 100));
+  }
 
   return NextResponse.json({
     totalRetail,
     totalPrice,
     unpurchasedCount: unpurchasedChapters.length,
     discount,
+    hasComboPrice,
   });
 }
 
@@ -56,6 +75,13 @@ export async function POST(
   const { userId } = await req.json();
 
   if (!userId) return NextResponse.json({ error: "Chưa đăng nhập" }, { status: 401 });
+
+  // Lấy comboPrice
+  const [novels] = await pool.query<RowDataPacket[]>(
+    `SELECT comboPrice FROM novel WHERE id = ? LIMIT 1`,
+    [novelId]
+  );
+  const comboPrice: number | null = novels[0]?.comboPrice ?? null;
 
   // Lấy tất cả chương trả phí chưa mua
   const [lockedChapters] = await pool.query<RowDataPacket[]>(
@@ -80,8 +106,9 @@ export async function POST(
   }
 
   const totalRetail = unpurchased.reduce((sum, c) => sum + c.price, 0);
-  const discount = 30;
-  const totalPrice = Math.ceil(totalRetail * (1 - discount / 100));
+  const totalPrice = (comboPrice !== null && comboPrice > 0)
+    ? comboPrice
+    : Math.ceil(totalRetail * 0.7);
 
   // Kiểm tra xu
   const [users] = await pool.query<RowDataPacket[]>(
@@ -96,7 +123,7 @@ export async function POST(
     }, { status: 402 });
   }
 
-  // Transaction: trừ xu + tạo purchase cho tất cả
+  // Transaction
   const conn = await pool.getConnection();
   try {
     await conn.beginTransaction();
@@ -106,8 +133,8 @@ export async function POST(
       [totalPrice, userId]
     );
 
+    // pricePaid mỗi chương theo tỷ lệ
     for (const chapter of unpurchased) {
-      // pricePaid theo tỷ lệ thực tế (giá lẻ * tỷ lệ giảm), làm tròn lên
       const pricePaid = totalRetail > 0
         ? Math.ceil((chapter.price / totalRetail) * totalPrice)
         : 0;

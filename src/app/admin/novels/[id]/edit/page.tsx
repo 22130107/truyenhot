@@ -36,6 +36,7 @@ export default function AdminEditNovelPage() {
   const [author, setAuthor] = useState("");
   const [status, setStatus] = useState("ONGOING");
   const [description, setDescription] = useState("");
+  const [comboPrice, setComboPrice] = useState<number | "">("");
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
@@ -51,6 +52,7 @@ export default function AdminEditNovelPage() {
           setCoverUrl(data.coverUrl || "");
           setPosterUrl(data.posterUrl || "");
           setSelectedCategories(data.categories || []);
+          setComboPrice(data.comboPrice ?? "");
         } else {
           alert(data.message || "Không thể tải dữ liệu truyện");
           router.push('/admin/novels');
@@ -128,7 +130,8 @@ export default function AdminEditNovelPage() {
           description,
           coverUrl,
           posterUrl,
-          categories: selectedCategories
+          categories: selectedCategories,
+          comboPrice: comboPrice === "" ? null : Number(comboPrice),
         })
       });
 
@@ -229,6 +232,21 @@ export default function AdminEditNovelPage() {
                   <option value="COMPLETED">Hoàn thành</option>
                   <option value="PAUSED">Tạm dừng</option>
                 </select>
+              </div>
+
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-neutral-400">
+                  Giá combo cả bộ (xu)
+                  <span className="text-neutral-500 text-xs font-normal ml-2">— để trống = tự động giảm 30%</span>
+                </label>
+                <input
+                  type="number"
+                  min={0}
+                  placeholder="VD: 200"
+                  value={comboPrice}
+                  onChange={(e) => setComboPrice(e.target.value === "" ? "" : Number(e.target.value))}
+                  className="w-full bg-[#0a0a0a] border border-neutral-800 text-yellow-400 font-bold rounded-xl px-4 py-3 focus:outline-none focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400/50 transition-all"
+                />
               </div>
             </div>
 
