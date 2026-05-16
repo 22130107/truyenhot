@@ -49,8 +49,27 @@ export function ChapterContent({
 }: ChapterContentProps) {
   const paragraphs = splitIntoParagraphs(content);
 
+  // Chống copy nội dung
+  const handlePreventCopy = (e: React.ClipboardEvent | React.MouseEvent) => {
+    e.preventDefault();
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    // Chặn Ctrl+C, Ctrl+A, Ctrl+U
+    if (e.ctrlKey && (e.key === 'c' || e.key === 'a' || e.key === 'u')) {
+      e.preventDefault();
+    }
+  };
+
   return (
-    <div className="border bg-[rgba(58,_59,_60,_0.6)]/60 border-neutral-800 shadow-2xl p-4 md:p-6 rounded-xl">
+    <div
+      className="border bg-[rgba(58,_59,_60,_0.6)]/60 border-neutral-800 shadow-2xl p-4 md:p-6 rounded-xl select-none"
+      onCopy={handlePreventCopy}
+      onCut={handlePreventCopy}
+      onContextMenu={handlePreventCopy}
+      onKeyDown={handleKeyDown}
+      tabIndex={0}
+    >
       <div className="mb-[24px] md:mb-[32px]">
         <h1 className="font-bold text-center mb-[16px] text-[24px] md:text-[30px] leading-tight md:leading-[36px]">
           Chương {chapterNumber}{chapterTitle ? `: ${chapterTitle}` : ""}

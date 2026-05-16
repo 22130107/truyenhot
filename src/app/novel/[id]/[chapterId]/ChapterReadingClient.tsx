@@ -73,6 +73,39 @@ export default function ChapterReadingClient() {
     if (novelId && chapterNum) fetchChapter();
   }, [novelId, chapterNum]);
 
+  // Chặn F12, Ctrl+Shift+I/J/C, Ctrl+U (DevTools & View Source)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // F12
+      if (e.key === 'F12') {
+        e.preventDefault();
+        return;
+      }
+      // Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C
+      if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) {
+        e.preventDefault();
+        return;
+      }
+      // Ctrl+U (view source)
+      if (e.ctrlKey && (e.key === 'u' || e.key === 'U')) {
+        e.preventDefault();
+        return;
+      }
+    };
+
+    const handleContextMenu = (e: MouseEvent) => {
+      e.preventDefault();
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('contextmenu', handleContextMenu);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('contextmenu', handleContextMenu);
+    };
+  }, []);
+
   // Fetch bulk info khi chương bị khóa
   useEffect(() => {
     if (!chapter?.isLocked || chapter.isPurchased) return;

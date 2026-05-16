@@ -45,3 +45,12 @@ body {
     scrollbar-width: none;
   }
 }
+
+/* Chống copy nội dung chương truyện */
+.select-none {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
