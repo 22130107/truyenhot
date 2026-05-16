@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { signOut } from "next-auth/react";
 import {
   LayoutDashboard,
   BookOpen,
@@ -45,6 +46,12 @@ export default function AdminLayout({
     };
     checkAuth();
   }, [router]);
+
+  const handleLogout = async () => {
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("user");
+    await signOut({ redirect: true, callbackUrl: "/" });
+  };
 
   if (!isAuthorized) {
     return (
@@ -96,7 +103,10 @@ export default function AdminLayout({
         </nav>
 
         <div className="p-4 border-t border-neutral-800">
-          <button className="flex items-center gap-3 px-4 py-3 w-full rounded-xl text-neutral-400 hover:text-red-400 hover:bg-red-400/10 transition-all duration-200">
+          <button 
+            onClick={handleLogout}
+            className="flex items-center gap-3 px-4 py-3 w-full rounded-xl text-neutral-400 hover:text-red-400 hover:bg-red-400/10 transition-all duration-200"
+          >
             <LogOut className="w-5 h-5" />
             Đăng xuất
           </button>

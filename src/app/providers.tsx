@@ -7,6 +7,11 @@ function SessionSync({ children }: { children: React.ReactNode }) {
   const { data, status } = useSession();
 
   useEffect(() => {
+    if (status === "unauthenticated") {
+      localStorage.removeItem("isLoggedIn");
+      localStorage.removeItem("user");
+      return;
+    }
     if (status !== "authenticated" || !data?.user) return;
     const user = data.user as {
       id?: string;

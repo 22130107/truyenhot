@@ -1,6 +1,7 @@
 "use client";
 import React from 'react';
 import Link from 'next/link';
+import { signOut } from 'next-auth/react';
 
 import { Logo } from './Logo';
 
@@ -49,12 +50,12 @@ export function Header() {
     };
   }, []);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('user');
     setIsLoggedIn(false);
     setUser(null);
-    window.location.href = '/';
+    await signOut({ redirect: true, callbackUrl: '/' });
   };
 
   return (
@@ -267,6 +268,12 @@ export function Header() {
                   <>
                     <Link href="/profile" onClick={() => setIsMobileMenuOpen(false)} className="block text-lg font-medium text-gray-200 py-2">Trang cá nhân</Link>
                     <Link href="/topup" onClick={() => setIsMobileMenuOpen(false)} className="block text-lg font-medium text-gray-200 py-2">Nạp xu</Link>
+                    <button 
+                      onClick={() => { setIsMobileMenuOpen(false); handleLogout(); }} 
+                      className="block text-lg font-bold text-red-500 py-2 w-full text-left"
+                    >
+                      Đăng xuất
+                    </button>
                   </>
                 )}
                 <Link href="/guide" onClick={() => setIsMobileMenuOpen(false)} className="block text-lg font-medium text-gray-200 py-2">Hướng dẫn nạp</Link>
