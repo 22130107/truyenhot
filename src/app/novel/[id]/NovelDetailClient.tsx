@@ -46,8 +46,17 @@ export default function NovelDetailClient() {
   const [novel, setNovel] = useState<NovelDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [reviews, setReviews] = useState<{ username: string; score: number; comment: string; createdAt: string }[]>([]);
 
-  useEffect(() => {
+  const fetchReviews = () => {
+    if (!id) return;
+    fetch(`/api/novels/${id}/rating`)
+      .then((r) => r.json())
+      .then((data) => setReviews(data.reviews ?? []))
+      .catch(() => {});
+  };
+
+  const fetchNovel = () => {
     if (!id) return;
     setLoading(true);
     const userId = (() => {
@@ -61,7 +70,34 @@ export default function NovelDetailClient() {
       })
       .catch(() => setError("Không thể tải truyện"))
       .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    fetchNovel();
+    fetchReviews();
   }, [id]);
+
+  // Re-fetch chỉ phần rating sau khi user submit
+  const refreshRating = () => {
+    if (!id) return;
+    const userId = (() => {
+      try { const raw = localStorage.getItem("user"); return raw ? JSON.parse(raw).id : null; } catch { return null; }
+    })();
+    fetch(`/api/novels/${id}${userId ? `?userId=${userId}` : ""}`)
+      .then((r) => r.json())
+      .then((data) => {
+        if (!data.error) {
+          setNovel((prev) => prev ? {
+            ...prev,
+            avgRating: data.avgRating,
+            totalRatings: data.totalRatings,
+            distribution: data.distribution,
+          } : prev);
+        }
+      })
+      .catch(() => {});
+    fetchReviews();
+  };
 
   const statusLabel =
     novel?.status === "COMPLETED" ? "Hoàn Thành"
@@ -157,8 +193,40 @@ export default function NovelDetailClient() {
                           distribution={novel.distribution}
                         />
                         <div className="mt-8">
-                          <RatingForm />
+                          <RatingForm novelId={id} onRated={refreshRating} />
                         </div>
+
+                        {/* Danh sách nhận xét */}
+                        {reviews.length > 0 && (
+                          <div className="space-y-3 max-w-sm ml-auto mr-auto">
+                            {reviews.map((review, i) => (
+                              <div key={i} className="bg-[rgb(10,10,10)] border border-neutral-800 rounded-lg p-4">
+                                <div className="flex items-center justify-between mb-2">
+                                  <div className="flex items-center gap-2">
+                                    <div className="w-7 h-7 rounded-full bg-neutral-700 flex items-center justify-center text-xs font-bold text-white uppercase">
+                                      {review.username?.[0] ?? "?"}
+                                    </div>
+                                    <span className="text-sm font-medium text-white">{review.username}</span>
+                                  </div>
+                                  <div className="flex gap-0.5">
+                                    {[1,2,3,4,5].map((s) => (
+                                      <svg key={s} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                        fill={s <= review.score ? "rgb(250,204,21)" : "none"}
+                                        stroke={s <= review.score ? "rgb(250,204,21)" : "currentColor"}
+                                        strokeWidth="2" className={`w-4 h-4 ${s <= review.score ? "" : "text-gray-600"}`}>
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                      </svg>
+                                    ))}
+                                  </div>
+                                </div>
+                                <p className="text-gray-300 text-sm leading-relaxed">{review.comment}</p>
+                                <p className="text-gray-600 text-xs mt-2">
+                                  {new Date(review.createdAt).toLocaleDateString("vi-VN")}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </>
                     ) : null}
                   </div>
