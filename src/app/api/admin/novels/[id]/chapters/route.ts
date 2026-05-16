@@ -59,8 +59,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     const body = await req.json();
     const { title, content, chapterNumber, isLocked, price } = body;
 
-    if (!title || !content || chapterNumber === undefined) {
-      return NextResponse.json({ message: 'Thiếu thông tin bắt buộc (Tên chương, Nội dung, Số chương)' }, { status: 400 });
+    if (!content || chapterNumber === undefined) {
+      return NextResponse.json({ message: 'Thiếu thông tin bắt buộc (Nội dung, Số chương)' }, { status: 400 });
     }
 
     const id = crypto.randomUUID();

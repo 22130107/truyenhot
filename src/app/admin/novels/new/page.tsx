@@ -206,8 +206,13 @@ export default function AdminAddNovelPage() {
                       try {
                         const mammoth = (await import('mammoth')).default;
                         const arrayBuffer = await file.arrayBuffer();
-                        const result = await mammoth.extractRawText({ arrayBuffer });
-                        setDescription(result.value);
+                        const result = await mammoth.convertToHtml({ arrayBuffer });
+                        const div = document.createElement("div");
+                        div.innerHTML = result.value;
+                        const paragraphs = Array.from(div.querySelectorAll("p"))
+                          .map((p) => p.textContent?.trim() ?? "")
+                          .filter((t) => t.length > 0);
+                        setDescription(paragraphs.join("\n"));
                       } catch (err) {
                         console.error('Lỗi đọc file Word:', err);
                         alert('Không thể đọc nội dung file Word này.');

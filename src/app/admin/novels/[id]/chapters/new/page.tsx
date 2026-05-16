@@ -135,8 +135,14 @@ export default function AdminAddChapterPage() {
                     try {
                       const mammoth = (await import('mammoth')).default;
                       const arrayBuffer = await file.arrayBuffer();
-                      const result = await mammoth.extractRawText({ arrayBuffer });
-                      setContent(result.value);
+                      const result = await mammoth.convertToHtml({ arrayBuffer });
+                      // Parse HTML → giữ nguyên từng đoạn <p> thành dòng riêng
+                      const div = document.createElement("div");
+                      div.innerHTML = result.value;
+                      const paragraphs = Array.from(div.querySelectorAll("p"))
+                        .map((p) => p.textContent?.trim() ?? "")
+                        .filter((t) => t.length > 0);
+                      setContent(paragraphs.join("\n"));
                     } catch (err) {
                       console.error('Lỗi đọc file Word:', err);
                       alert('Không thể đọc nội dung file Word này.');
