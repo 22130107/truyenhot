@@ -13,7 +13,7 @@ export async function GET(
     const [novels] = await pool.query<RowDataPacket[]>(
       `SELECT
          n.id, n.title, n.description, n.coverUrl, n.posterUrl,
-         n.author, n.status, n.views, n.createdAt, n.updatedAt,
+         n.author, n.editor, n.status, n.views, n.createdAt, n.updatedAt,
          ROUND(COALESCE(AVG(r.score), 0), 1)  AS avgRating,
          COUNT(DISTINCT r.id)                  AS totalRatings,
          COUNT(DISTINCT b.id)                  AS bookmarkCount,

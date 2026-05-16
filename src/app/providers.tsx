@@ -11,19 +11,23 @@ function SessionSync({ children }: { children: React.ReactNode }) {
     const user = data.user as {
       id?: string;
       username?: string;
+      name?: string;
       email?: string;
       avatarUrl?: string | null;
       coins?: number;
       role?: string;
+      createdAt?: string | null;
     };
 
     const payload = {
       id: user.id,
       username: user.username || user.email || "",
+      name: user.name || user.username || user.email || "",
       email: user.email || "",
       avatarUrl: user.avatarUrl || null,
       coins: user.coins ?? 0,
       role: user.role || "USER",
+      createdAt: user.createdAt || null,
     };
 
     localStorage.setItem("isLoggedIn", "true");

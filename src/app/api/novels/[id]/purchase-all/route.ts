@@ -41,6 +41,8 @@ export async function GET(
   }
 
   const totalRetail = unpurchasedChapters.reduce((sum, c) => sum + c.price, 0);
+  // Tổng giá lẻ toàn bộ chương (dùng để tính % giảm chính xác)
+  const fullRetail = lockedChapters.reduce((sum, c) => sum + c.price, 0);
 
   let totalPrice: number;
   let discount: number;
@@ -49,7 +51,10 @@ export async function GET(
   if (comboPrice !== null && comboPrice > 0) {
     // Dùng giá combo cố định
     totalPrice = comboPrice;
-    discount = totalRetail > 0 ? Math.round((1 - comboPrice / totalRetail) * 100) : 0;
+    // Tính discount so với fullRetail để tránh chia số nhỏ hoặc ra số âm
+    discount = fullRetail > 0
+      ? Math.min(99, Math.max(0, Math.round((1 - comboPrice / fullRetail) * 100)))
+      : 0;
     hasComboPrice = true;
   } else {
     // Giảm 30% mặc định

@@ -12,6 +12,7 @@ interface DbUser {
   avatarUrl: string | null;
   coins: number;
   role: string;
+  createdAt: string | null;
 }
 
 function normalizeUsername(input: string) {
@@ -24,7 +25,7 @@ function normalizeUsername(input: string) {
 
 async function findUserByEmail(email: string): Promise<DbUser | null> {
   const [rows] = await pool.query<RowDataPacket[]>(
-    "SELECT id, email, username, avatarUrl, coins, role FROM user WHERE email = ? LIMIT 1",
+    "SELECT id, email, username, avatarUrl, coins, role, createdAt FROM user WHERE email = ? LIMIT 1",
     [email]
   );
   if (!rows.length) return null;
@@ -36,6 +37,7 @@ async function findUserByEmail(email: string): Promise<DbUser | null> {
     avatarUrl: row.avatarUrl || null,
     coins: row.coins ?? 0,
     role: row.role,
+    createdAt: row.createdAt ? new Date(row.createdAt).toISOString() : null,
   };
 }
 
@@ -85,6 +87,10 @@ async function ensureUser(params: {
     [id, params.email, username, passwordHash, params.avatarUrl]
   );
 
+  // Query lại để lấy createdAt chính xác từ DB
+  const newUser = await findUserByEmail(params.email);
+  if (newUser) return newUser;
+
   return {
     id,
     email: params.email,
@@ -92,6 +98,7 @@ async function ensureUser(params: {
     avatarUrl: params.avatarUrl,
     coins: 0,
     role: "USER",
+    createdAt: new Date().toISOString(),
   };
 }
 
@@ -132,10 +139,12 @@ const authOptions = {
         const dbUser = await ensureUser({ email, name, avatarUrl });
         token.userId = dbUser.id;
         token.username = dbUser.username;
+        token.name = name; // tên thực từ provider (Google/Facebook)
         token.email = dbUser.email;
         token.avatarUrl = dbUser.avatarUrl;
         token.coins = dbUser.coins;
         token.role = dbUser.role;
+        token.createdAt = dbUser.createdAt;
       }
       return token;
     },
@@ -144,17 +153,21 @@ const authOptions = {
         const user = session.user as {
           id?: string;
           username?: string;
+          name?: string;
           email?: string;
           avatarUrl?: string | null;
           coins?: number;
           role?: string;
+          createdAt?: string | null;
         };
         user.id = (token.userId as string) || (token.sub as string) || user.id;
         user.username = (token.username as string) || user.username;
+        user.name = (token.name as string) || user.name;
         user.email = (token.email as string) || user.email;
         user.avatarUrl = (token.avatarUrl as string) || user.avatarUrl || null;
         user.coins = (token.coins as number) ?? user.coins ?? 0;
         user.role = (token.role as string) || user.role || "USER";
+        user.createdAt = (token.createdAt as string) || user.createdAt || null;
       }
       return session;
     },

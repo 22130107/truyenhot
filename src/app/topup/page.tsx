@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { Header } from "@/components/home/Header";
 import { Footer } from "@/components/home/Footer";
 
@@ -145,7 +146,7 @@ export default function TopupPage() {
 
   const handleSelectPackage = async (pkg: TopupPackage) => {
     if (!userId) {
-      setErrorMsg("Bạn cần đăng nhập để nạp xu.");
+      setErrorMsg("login_required");
       return;
     }
 
@@ -226,8 +227,18 @@ export default function TopupPage() {
 
         {/* Error message */}
         {errorMsg && (
-          <div className="mb-6 bg-red-500/10 border border-red-500/30 text-red-400 rounded-xl px-4 py-3 text-sm">
-            {errorMsg}
+          <div className="mb-6 bg-red-500/10 border border-red-500/30 text-red-400 rounded-xl px-4 py-3 text-sm flex items-center gap-2 flex-wrap">
+            {errorMsg === "login_required" ? (
+              <>
+                Bạn cần{" "}
+                <Link href="/login" className="underline font-bold text-red-300 hover:text-white transition-colors">
+                  đăng nhập
+                </Link>
+                {" "}trước khi nạp xu.
+              </>
+            ) : (
+              errorMsg
+            )}
           </div>
         )}
 
@@ -430,22 +441,34 @@ export default function TopupPage() {
         {/* Hướng dẫn thanh toán */}
         <div className="bg-[rgb(31,41,55)] border border-neutral-800 rounded-2xl p-8 shadow-2xl mb-8">
           <h2 className="text-xl font-bold mb-4">Hướng dẫn nạp xu qua chuyển khoản</h2>
-          <ol className="space-y-3 text-sm text-gray-300">
-            <li className="flex gap-3">
-              <span className="w-6 h-6 rounded-full bg-yellow-500/20 text-yellow-400 flex items-center justify-center shrink-0 text-xs font-bold">1</span>
-              Chọn gói xu bạn muốn nạp và nhấn <strong>"Nạp ngay"</strong>
+          <ol className="space-y-4 text-sm text-gray-300">
+            <li className="flex gap-3 items-start">
+              <span className="w-6 h-6 rounded-full bg-yellow-500/20 text-yellow-400 flex items-center justify-center shrink-0 text-xs font-bold mt-0.5">1</span>
+              <span>
+                <Link href="/login" className="font-bold text-yellow-400 underline hover:text-yellow-300 transition-colors">Đăng nhập</Link>
+                {" "}tài khoản của bạn (nếu chưa có,{" "}
+                <Link href="/register" className="font-bold text-yellow-400 underline hover:text-yellow-300 transition-colors">đăng ký tại đây</Link>)
+              </span>
             </li>
-            <li className="flex gap-3">
-              <span className="w-6 h-6 rounded-full bg-yellow-500/20 text-yellow-400 flex items-center justify-center shrink-0 text-xs font-bold">2</span>
+            <li className="flex gap-3 items-start">
+              <span className="w-6 h-6 rounded-full bg-yellow-500/20 text-yellow-400 flex items-center justify-center shrink-0 text-xs font-bold mt-0.5">2</span>
+              <span>
+                Vào trang{" "}
+                <Link href="/topup" className="font-bold text-yellow-400 underline hover:text-yellow-300 transition-colors">Nạp xu</Link>
+                , chọn gói bạn muốn và nhấn <strong>"Nạp ngay"</strong>
+              </span>
+            </li>
+            <li className="flex gap-3 items-start">
+              <span className="w-6 h-6 rounded-full bg-yellow-500/20 text-yellow-400 flex items-center justify-center shrink-0 text-xs font-bold mt-0.5">3</span>
               Quét mã QR bằng app ngân hàng hoặc chuyển khoản thủ công theo thông tin hiển thị
             </li>
-            <li className="flex gap-3">
-              <span className="w-6 h-6 rounded-full bg-yellow-500/20 text-yellow-400 flex items-center justify-center shrink-0 text-xs font-bold">3</span>
+            <li className="flex gap-3 items-start">
+              <span className="w-6 h-6 rounded-full bg-yellow-500/20 text-yellow-400 flex items-center justify-center shrink-0 text-xs font-bold mt-0.5">4</span>
               <span>Nhập <strong className="text-yellow-400">đúng nội dung chuyển khoản</strong> (mã hiển thị trên màn hình) — hệ thống tự động xác nhận trong vài giây</span>
             </li>
-            <li className="flex gap-3">
-              <span className="w-6 h-6 rounded-full bg-yellow-500/20 text-yellow-400 flex items-center justify-center shrink-0 text-xs font-bold">4</span>
-              Xu được cộng ngay sau khi giao dịch được xác nhận
+            <li className="flex gap-3 items-start">
+              <span className="w-6 h-6 rounded-full bg-yellow-500/20 text-yellow-400 flex items-center justify-center shrink-0 text-xs font-bold mt-0.5">5</span>
+              Xu được cộng ngay vào tài khoản sau khi giao dịch được xác nhận
             </li>
           </ol>
         </div>
