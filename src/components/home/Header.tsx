@@ -22,23 +22,31 @@ export function Header() {
       .then((data: { name: string }[]) => setGenres(data.map((g) => g.name)))
       .catch(() => setGenres([]));
 
-    const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
-    setIsLoggedIn(loggedIn);
-    
-    if (loggedIn) {
-      const userData = localStorage.getItem('user');
-      if (userData) {
-        try {
-          setUser(JSON.parse(userData));
-        } catch (e) {}
+    const loadUser = () => {
+      const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
+      setIsLoggedIn(loggedIn);
+      if (loggedIn) {
+        const userData = localStorage.getItem('user');
+        if (userData) {
+          try { setUser(JSON.parse(userData)); } catch {}
+        }
+      } else {
+        setUser(null);
       }
-    }
-
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
     };
+
+    loadUser();
+
+    // Cập nhật ngay khi localStorage thay đổi (đăng nhập / đổi tài khoản)
+    window.addEventListener('storage', loadUser);
+
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('storage', loadUser);
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   const handleLogout = () => {

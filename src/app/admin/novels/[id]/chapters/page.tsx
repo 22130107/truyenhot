@@ -205,9 +205,12 @@ export default function AdminChaptersPage() {
                   <td className="p-4 text-neutral-400 text-sm">{chapter.date}</td>
                   <td className="p-4 text-center">
                     <div className="flex justify-center items-center gap-2">
-                      <button className="p-1.5 text-neutral-400 hover:text-yellow-400 bg-neutral-800/50 hover:bg-neutral-800 rounded-lg transition-colors">
+                      <Link
+                        href={`/admin/novels/${novelId}/chapters/${chapter.id}/edit`}
+                        className="p-1.5 text-neutral-400 hover:text-yellow-400 bg-neutral-800/50 hover:bg-neutral-800 rounded-lg transition-colors"
+                      >
                         <Edit className="w-4 h-4" />
-                      </button>
+                      </Link>
                       <button 
                         onClick={() => handleDeleteChapter(chapter.id, chapter.title)}
                         className="p-1.5 text-neutral-400 hover:text-red-400 bg-neutral-800/50 hover:bg-neutral-800 rounded-lg transition-colors"

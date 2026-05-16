@@ -5,26 +5,49 @@ import Link from 'next/link';
 import { Header } from '@/components/home/Header';
 import { Footer } from '@/components/home/Footer';
 
+interface Purchase {
+  id: string;
+  pricePaid: number;
+  purchasedAt: string;
+  chapterNumber: number | null;
+  chapterTitle: string | null;
+  novelId: string;
+  novelTitle: string;
+  isCombo: boolean;
+  comboCount: number;
+}
+
 export default function ProfilePage() {
   const [user, setUser] = useState<any>(null);
+  const [purchases, setPurchases] = useState<Purchase[]>([]);
+  const [loadingPurchases, setLoadingPurchases] = useState(false);
 
   useEffect(() => {
     const loadUser = () => {
       const userData = localStorage.getItem('user');
       if (userData) {
         try {
-          setUser(JSON.parse(userData));
+          const parsed = JSON.parse(userData);
+          setUser(parsed);
+          // Fetch lịch sử mua sau khi có userId
+          if (parsed?.id) {
+            setLoadingPurchases(true);
+            fetch(`/api/user/purchases?userId=${parsed.id}`)
+              .then((r) => r.json())
+              .then((data) => setPurchases(Array.isArray(data) ? data : []))
+              .catch(() => setPurchases([]))
+              .finally(() => setLoadingPurchases(false));
+          }
         } catch (e) {
           console.error('Lỗi phân tích thông tin người dùng', e);
         }
       } else {
         setUser(null);
+        setPurchases([]);
       }
     };
 
     loadUser();
-
-    // Cập nhật khi localStorage thay đổi (đăng nhập tài khoản khác ở tab khác)
     window.addEventListener('storage', loadUser);
     return () => window.removeEventListener('storage', loadUser);
   }, []);
@@ -116,18 +139,63 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        {/* Lịch sử giao dịch */}
+        {/* Lịch sử mua chương */}
         <div className="bg-[rgb(31,41,55)] border border-neutral-800 rounded-xl p-6 shadow-lg mb-8">
           <div className="flex items-center gap-2 mb-2">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 text-gray-400">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 text-yellow-500">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <h2 className="font-bold text-gray-300">Lịch sử giao dịch</h2>
+            <h2 className="font-bold text-gray-300">Lịch sử mua chương</h2>
           </div>
-          <p className="text-xs text-gray-500 mb-6">Chưa có giao dịch nào</p>
-          <div className="py-8 text-center text-gray-600 text-sm">
-            Không tìm thấy dữ liệu
-          </div>
+          <p className="text-xs text-gray-500 mb-4">Các chương truyện bạn đã mở khóa</p>
+
+          {loadingPurchases ? (
+            <div className="py-8 text-center text-gray-500 text-sm">Đang tải...</div>
+          ) : purchases.length === 0 ? (
+            <div className="py-8 text-center text-gray-600 text-sm">Chưa có lịch sử mua chương nào</div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-neutral-700">
+                    <th className="text-left py-2 px-3 text-gray-400 font-medium">Truyện</th>
+                    <th className="text-left py-2 px-3 text-gray-400 font-medium">Chương</th>
+                    <th className="text-center py-2 px-3 text-gray-400 font-medium">Xu đã dùng</th>
+                    <th className="text-right py-2 px-3 text-gray-400 font-medium">Ngày mua</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-neutral-800">
+                  {purchases.map((p) => (
+                    <tr key={p.id} className="hover:bg-white/5 transition-colors">
+                      <td className="py-3 px-3">
+                        <Link href={`/novel/${p.novelId}`} className="text-white hover:text-yellow-400 transition-colors font-medium line-clamp-1">
+                          {p.novelTitle}
+                        </Link>
+                      </td>
+                      <td className="py-3 px-3">
+                        {p.isCombo ? (
+                          <span className="inline-flex items-center gap-1.5 text-yellow-400 font-medium">
+                            <span className="bg-yellow-400/10 border border-yellow-400/30 text-yellow-400 text-[10px] font-bold px-1.5 py-0.5 rounded">COMBO</span>
+                            {p.comboCount} chương
+                          </span>
+                        ) : (
+                          <Link href={`/novel/${p.novelId}/${p.chapterNumber}`} className="text-gray-300 hover:text-yellow-400 transition-colors">
+                            Chương {p.chapterNumber}{p.chapterTitle ? `: ${p.chapterTitle}` : ""}
+                          </Link>
+                        )}
+                      </td>
+                      <td className="py-3 px-3 text-center">
+                        <span className="text-yellow-400 font-bold">{p.pricePaid} xu</span>
+                      </td>
+                      <td className="py-3 px-3 text-right text-gray-500 text-xs">
+                        {new Date(p.purchasedAt).toLocaleString('vi-VN')}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
 
         {/* Footer Navigation */}

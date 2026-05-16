@@ -459,7 +459,7 @@ export default function TopupPage() {
             <div className="flex items-start gap-4">
               <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center shrink-0 text-xs font-bold border border-white/10">1</div>
               <p className="text-gray-300 text-sm leading-relaxed pt-1.5">
-                Theo dõi Fanpage Facebook và Tiktok (@khicuocdoichobantongtai)
+                Theo dõi Fanpage Facebook
               </p>
             </div>
             <div className="flex items-start gap-4">
