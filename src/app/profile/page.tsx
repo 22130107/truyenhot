@@ -17,10 +17,22 @@ interface Purchase {
   comboCount: number;
 }
 
+interface Transaction {
+  id: string;
+  amountXu: number;
+  amountMoney: number;
+  paymentMethod: string;
+  paymentRef: string | null;
+  status: 'PENDING' | 'COMPLETED' | 'FAILED' | 'CANCELLED';
+  createdAt: string;
+}
+
 export default function ProfilePage() {
   const [user, setUser] = useState<any>(null);
   const [purchases, setPurchases] = useState<Purchase[]>([]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loadingPurchases, setLoadingPurchases] = useState(false);
+  const [loadingTransactions, setLoadingTransactions] = useState(false);
 
   useEffect(() => {
     const loadUser = () => {
@@ -37,6 +49,13 @@ export default function ProfilePage() {
               .then((data) => setPurchases(Array.isArray(data) ? data : []))
               .catch(() => setPurchases([]))
               .finally(() => setLoadingPurchases(false));
+
+            setLoadingTransactions(true);
+            fetch(`/api/user/transactions?userId=${parsed.id}`)
+              .then((r) => r.json())
+              .then((data) => setTransactions(Array.isArray(data) ? data : []))
+              .catch(() => setTransactions([]))
+              .finally(() => setLoadingTransactions(false));
           }
         } catch (e) {
           console.error('Lỗi phân tích thông tin người dùng', e);
@@ -189,6 +208,66 @@ export default function ProfilePage() {
                       </td>
                       <td className="py-3 px-3 text-right text-gray-500 text-xs">
                         {new Date(p.purchasedAt).toLocaleString('vi-VN')}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+
+        {/* Lịch sử nạp tiền */}
+        <div className="bg-[rgb(31,41,55)] border border-neutral-800 rounded-xl p-6 shadow-lg mb-8">
+          <div className="flex items-center gap-2 mb-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 text-green-500">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <h2 className="font-bold text-gray-300">Lịch sử nạp tiền</h2>
+          </div>
+          <p className="text-xs text-gray-500 mb-4">Lịch sử các giao dịch nạp xu của bạn</p>
+
+          {loadingTransactions ? (
+            <div className="py-8 text-center text-gray-500 text-sm">Đang tải...</div>
+          ) : transactions.length === 0 ? (
+            <div className="py-8 text-center text-gray-600 text-sm">Chưa có giao dịch nạp tiền nào</div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-neutral-700">
+                    <th className="text-left py-2 px-3 text-gray-400 font-medium">Mã giao dịch</th>
+                    <th className="text-left py-2 px-3 text-gray-400 font-medium">Số tiền</th>
+                    <th className="text-center py-2 px-3 text-gray-400 font-medium">Số xu nhận</th>
+                    <th className="text-center py-2 px-3 text-gray-400 font-medium">Trạng thái</th>
+                    <th className="text-right py-2 px-3 text-gray-400 font-medium">Ngày nạp</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-neutral-800">
+                  {transactions.map((t) => (
+                    <tr key={t.id} className="hover:bg-white/5 transition-colors">
+                      <td className="py-3 px-3">
+                        <span className="text-xs font-mono text-gray-400">{t.id.slice(0, 8)}...</span>
+                      </td>
+                      <td className="py-3 px-3">
+                        <span className="text-white font-medium">{t.amountMoney.toLocaleString('vi-VN')}đ</span>
+                        <div className="text-[10px] text-gray-500">{t.paymentMethod}</div>
+                      </td>
+                      <td className="py-3 px-3 text-center">
+                        <span className="text-yellow-400 font-bold">+{t.amountXu} xu</span>
+                      </td>
+                      <td className="py-3 px-3 text-center">
+                        <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider ${
+                          t.status === 'COMPLETED' ? 'bg-green-500/10 text-green-500' :
+                          t.status === 'PENDING' ? 'bg-yellow-500/10 text-yellow-500' :
+                          'bg-red-500/10 text-red-500'
+                        }`}>
+                          {t.status === 'COMPLETED' ? 'Thành công' :
+                           t.status === 'PENDING' ? 'Chờ duyệt' : 'Thất bại'}
+                        </span>
+                      </td>
+                      <td className="py-3 px-3 text-right text-gray-500 text-xs">
+                        {new Date(t.createdAt).toLocaleString('vi-VN')}
                       </td>
                     </tr>
                   ))}

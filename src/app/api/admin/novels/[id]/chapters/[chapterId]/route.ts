@@ -24,7 +24,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
     const resolvedParams = await params;
     const { novelId, chapterId } = resolvedParams as any; // Actually the route is [id]/chapters/[chapterId] so params are id and chapterId
     const cId = resolvedParams.chapterId;
-    
+
     if (!cId) return NextResponse.json({ message: 'Missing Chapter ID' }, { status: 400 });
 
     const body = await req.json();
@@ -68,13 +68,13 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
   try {
     const resolvedParams = await params;
     const cId = resolvedParams.chapterId;
-    
+
     if (!cId) return NextResponse.json({ message: 'Missing Chapter ID' }, { status: 400 });
 
     const connection = await pool.getConnection();
     try {
       await connection.beginTransaction();
-      
+
       await connection.query('DELETE FROM purchase WHERE chapterId = ?', [cId]);
       await connection.query('DELETE FROM chapter WHERE id = ?', [cId]);
 

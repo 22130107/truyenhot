@@ -65,12 +65,14 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
 
     const id = crypto.randomUUID();
 
+    const finalTitle = title?.trim() || `Chương ${chapterNumber}`;
+
     const connection = await pool.getConnection();
     try {
       await connection.query(
         `INSERT INTO chapter (id, novelId, title, content, chapterNumber, isLocked, price, updatedAt)
          VALUES (?, ?, ?, ?, ?, ?, ?, NOW())`,
-        [id, novelId, title?.trim() || null, content, chapterNumber, isLocked ? 1 : 0, price || 0]
+        [id, novelId, finalTitle, content, chapterNumber, isLocked ? 1 : 0, price || 0]
       );
 
       connection.release();
