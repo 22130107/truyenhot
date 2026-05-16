@@ -167,7 +167,7 @@ export function Header() {
                     <div className="bg-[rgb(42,51,34)] border border-neutral-800 rounded-lg shadow-2xl w-64 overflow-hidden">
                       {/* User Info Section */}
                       <div className="p-4 border-b border-neutral-800">
-                        <div className="font-bold text-white text-lg">{user ? user.username : 'Người dùng'}</div>
+                        <div className="font-bold text-white text-lg">{user ? (user.name || user.username) : 'Người dùng'}</div>
                         <div className="text-gray-500 text-xs truncate">{user ? user.email : ''}</div>
                       </div>
                       
