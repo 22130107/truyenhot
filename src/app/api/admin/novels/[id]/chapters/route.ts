@@ -70,7 +70,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       await connection.query(
         `INSERT INTO chapter (id, novelId, title, content, chapterNumber, isLocked, price, updatedAt)
          VALUES (?, ?, ?, ?, ?, ?, ?, NOW())`,
-        [id, novelId, title, content, chapterNumber, isLocked ? 1 : 0, price || 0]
+        [id, novelId, title?.trim() || null, content, chapterNumber, isLocked ? 1 : 0, price || 0]
       );
 
       connection.release();

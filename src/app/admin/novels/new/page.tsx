@@ -72,6 +72,7 @@ export default function AdminAddNovelPage() {
 
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
+  const [editor, setEditor] = useState("");
   const [status, setStatus] = useState("ONGOING");
   const [description, setDescription] = useState("");
   const [isSaving, setIsSaving] = useState(false);
@@ -90,6 +91,7 @@ export default function AdminAddNovelPage() {
         body: JSON.stringify({
           title,
           author,
+          editor,
           status,
           description,
           coverUrl,
@@ -156,6 +158,20 @@ export default function AdminAddNovelPage() {
                 />
               </div>
 
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-neutral-400">
+                  Người dịch
+                  <span className="text-neutral-500 text-xs font-normal ml-2">(không bắt buộc)</span>
+                </label>
+                <input
+                  type="text"
+                  placeholder="Nhập tên người dịch..."
+                  value={editor}
+                  onChange={(e) => setEditor(e.target.value)}
+                  className="w-full bg-[#0a0a0a] border border-neutral-800 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400/50 transition-all"
+                />
+              </div>
+
               <div className="space-y-3 md:col-span-2">
                 <label className="block text-sm font-medium text-neutral-400">Thể loại <span className="text-neutral-500 text-xs font-normal ml-1">(Chọn nhiều)</span></label>
                 <div className="flex flex-wrap gap-2">
@@ -205,14 +221,10 @@ export default function AdminAddNovelPage() {
                       
                       try {
                         const mammoth = (await import('mammoth')).default;
+                        const { parseWordHtmlToText } = await import('@/lib/parseWordContent');
                         const arrayBuffer = await file.arrayBuffer();
                         const result = await mammoth.convertToHtml({ arrayBuffer });
-                        const div = document.createElement("div");
-                        div.innerHTML = result.value;
-                        const paragraphs = Array.from(div.querySelectorAll("p"))
-                          .map((p) => p.textContent?.trim() ?? "")
-                          .filter((t) => t.length > 0);
-                        setDescription(paragraphs.join("\n"));
+                        setDescription(parseWordHtmlToText(result.value));
                       } catch (err) {
                         console.error('Lỗi đọc file Word:', err);
                         alert('Không thể đọc nội dung file Word này.');

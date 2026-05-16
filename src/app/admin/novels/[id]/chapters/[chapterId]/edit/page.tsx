@@ -154,15 +154,10 @@ export default function AdminEditChapterPage() {
                     if (!file) return;
                     try {
                       const mammoth = (await import("mammoth")).default;
+                      const { parseWordHtmlToText } = await import("@/lib/parseWordContent");
                       const arrayBuffer = await file.arrayBuffer();
                       const result = await mammoth.convertToHtml({ arrayBuffer });
-                      // Parse HTML → giữ nguyên từng đoạn <p> thành dòng riêng
-                      const div = document.createElement("div");
-                      div.innerHTML = result.value;
-                      const paragraphs = Array.from(div.querySelectorAll("p"))
-                        .map((p) => p.textContent?.trim() ?? "")
-                        .filter((t) => t.length > 0);
-                      setContent(paragraphs.join("\n"));
+                      setContent(parseWordHtmlToText(result.value));
                     } catch {
                       alert("Không thể đọc nội dung file Word này.");
                     }

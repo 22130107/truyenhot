@@ -43,7 +43,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
     if (!novelId) return NextResponse.json({ message: 'Missing ID' }, { status: 400 });
 
     const body = await req.json();
-    const { title, author, description, status, coverUrl, posterUrl, categories, comboPrice } = body;
+    const { title, author, editor, description, status, coverUrl, posterUrl, categories, comboPrice } = body;
 
     if (!title || !author) {
       return NextResponse.json({ message: 'Thiếu thông tin bắt buộc' }, { status: 400 });
@@ -54,8 +54,8 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
       await connection.beginTransaction();
 
       await connection.query<ResultSetHeader>(
-        `UPDATE novel SET title = ?, description = ?, coverUrl = ?, posterUrl = ?, author = ?, status = ?, comboPrice = ?, updatedAt = NOW() WHERE id = ?`,
-        [title, description || '', coverUrl || null, posterUrl || null, author, status || 'ONGOING', comboPrice ?? null, novelId]
+        `UPDATE novel SET title = ?, description = ?, coverUrl = ?, posterUrl = ?, author = ?, editor = ?, status = ?, comboPrice = ?, updatedAt = NOW() WHERE id = ?`,
+        [title, description || '', coverUrl || null, posterUrl || null, author, editor?.trim() || null, status || 'ONGOING', comboPrice ?? null, novelId]
       );
 
       // Re-link categories

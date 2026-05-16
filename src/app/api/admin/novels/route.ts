@@ -34,7 +34,7 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { title, author, description, status, coverUrl, posterUrl, categories } = body;
+    const { title, author, editor, description, status, coverUrl, posterUrl, categories } = body;
 
     if (!title || !author) {
       return NextResponse.json({ message: 'Thiếu thông tin bắt buộc (Tên truyện, Tác giả)' }, { status: 400 });
@@ -42,7 +42,6 @@ export async function POST(req: Request) {
 
     const id = crypto.randomUUID();
     const rawSlug = slugify(title) || id.substring(0, 8);
-    // In a real app we'd check for slug uniqueness. Here we append a short id to avoid collisions easily.
     const slug = `${rawSlug}-${id.substring(0, 4)}`;
 
     const connection = await pool.getConnection();
@@ -51,9 +50,9 @@ export async function POST(req: Request) {
     try {
       // 1. Insert novel
       await connection.query<ResultSetHeader>(
-        `INSERT INTO novel (id, title, slug, description, coverUrl, posterUrl, author, status, views, createdAt, updatedAt) 
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, NOW(), NOW())`,
-        [id, title, slug, description || '', coverUrl || null, posterUrl || null, author, status || 'ONGOING']
+        `INSERT INTO novel (id, title, slug, description, coverUrl, posterUrl, author, editor, status, views, createdAt, updatedAt) 
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0, NOW(), NOW())`,
+        [id, title, slug, description || '', coverUrl || null, posterUrl || null, author, editor?.trim() || null, status || 'ONGOING']
       );
 
       // 2. Handle categories (Genres)

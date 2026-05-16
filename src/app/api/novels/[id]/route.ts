@@ -114,6 +114,7 @@ export async function GET(
       coverUrl: novel.coverUrl || "",
       posterUrl: novel.posterUrl || "",
       author: novel.author,
+      editor: novel.editor || null,
       status: novel.status,
       views: novel.views,
       updatedAt: novel.updatedAt,

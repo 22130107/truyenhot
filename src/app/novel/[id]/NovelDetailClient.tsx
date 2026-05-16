@@ -22,6 +22,7 @@ interface NovelDetail {
   coverUrl: string;
   posterUrl: string;
   author: string;
+  editor: string | null;
   status: string;
   views: number;
   updatedAt: string;
@@ -146,7 +147,7 @@ export default function NovelDetailClient() {
                       <DetailSidebar
                         coverImage={novel.coverUrl}
                         title={novel.title}
-                        translator=""
+                        translator={novel.editor || ""}
                         translatorUrl="#"
                         author={novel.author}
                         status={statusLabel}
