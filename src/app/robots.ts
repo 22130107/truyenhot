@@ -12,18 +12,8 @@ export default function robots(): MetadataRoute.Robots {
           "/profile",
           "/library",
           "/topup",
-        ],
-      },
-      // Chặn bot crawl trang admin riêng
-      {
-        userAgent: "Googlebot",
-        allow: "/",
-        disallow: [
-          "/admin/",
-          "/api/",
-          "/profile",
-          "/library",
-          "/topup",
+          "/login",
+          "/register",
         ],
       },
     ],
